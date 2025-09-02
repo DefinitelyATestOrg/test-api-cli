@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/bruce-hill/bruce-test-api-go"
 	"github.com/stainless-sdks/bruce-test-api-cli/pkg/cmd"
-	"github.com/stainless-sdks/bruce-test-api-go"
 )
 
 func main() {
