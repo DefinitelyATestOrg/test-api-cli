@@ -1,4 +1,4 @@
-module github.com/stainless-sdks/bruce-test-api-cli
+module github.com/bruce-hill/bruce-test-api-cli
 
 go 1.21
 
