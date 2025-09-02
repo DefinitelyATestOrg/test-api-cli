@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bruce-hill/bruce-test-api-go"
+	"github.com/bruce-hill/bruce-test-api-go/option"
 	"github.com/stainless-sdks/bruce-test-api-cli/pkg/jsonflag"
-	"github.com/stainless-sdks/bruce-test-api-go"
-	"github.com/stainless-sdks/bruce-test-api-go/option"
 	"github.com/urfave/cli/v3"
 )
 
