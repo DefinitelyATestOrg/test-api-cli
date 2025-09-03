@@ -13,34 +13,36 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var webhooksRegister = cli.Command{
-	Name:  "register",
-	Usage: "Register Webhook",
+var nameSet = cli.Command{
+	Name:  "set",
+	Usage: "Set Name",
 	Flags: []cli.Flag{
 		&jsonflag.JSONStringFlag{
-			Name: "url",
+			Name: "name",
 			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "url",
+				Kind: jsonflag.Query,
+				Path: "name",
 			},
 		},
 	},
-	Action:          handleWebhooksRegister,
+	Action:          handleNameSet,
 	HideHelpCommand: true,
 }
 
-func handleWebhooksRegister(ctx context.Context, cmd *cli.Command) error {
+func handleNameSet(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	params := brucetestapi.WebhookRegisterParams{}
-	res, err := cc.client.Webhooks.Register(
+	params := brucetestapi.NameSetParams{}
+	res := []byte{}
+	_, err := cc.client.Name.Set(
 		context.TODO(),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("%s\n", ColorizeJSON(res.RawJSON(), os.Stdout))
+	fmt.Printf("%s\n", ColorizeJSON(string(res), os.Stdout))
 	return nil
 }

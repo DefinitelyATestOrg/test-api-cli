@@ -22,10 +22,18 @@ var Command = cli.Command{
 	},
 	Commands: []*cli.Command{
 		{
-			Name:     "webhooks",
+			Name:     "foo",
 			Category: "API RESOURCE",
 			Commands: []*cli.Command{
-				&webhooksRegister,
+				&fooList,
+			},
+		},
+
+		{
+			Name:     "name",
+			Category: "API RESOURCE",
+			Commands: []*cli.Command{
+				&nameSet,
 			},
 		},
 	},
