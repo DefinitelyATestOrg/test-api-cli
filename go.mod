@@ -2,7 +2,7 @@ module github.com/bruce-hill/bruce-test-api-cli
 
 go 1.23.0
 
-toolchain go1.24.6
+toolchain go1.24.7
 
 require (
 	github.com/bruce-hill/bruce-test-api-go v0.4.0
