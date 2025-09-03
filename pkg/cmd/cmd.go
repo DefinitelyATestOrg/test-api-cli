@@ -22,18 +22,11 @@ var Command = cli.Command{
 	},
 	Commands: []*cli.Command{
 		{
-			Name:     "foo",
+			Name:     "$client",
 			Category: "API RESOURCE",
 			Commands: []*cli.Command{
-				&fooList,
-			},
-		},
-
-		{
-			Name:     "name",
-			Category: "API RESOURCE",
-			Commands: []*cli.Command{
-				&nameSet,
+				&clientGetFoo,
+				&clientSetText,
 			},
 		},
 	},
