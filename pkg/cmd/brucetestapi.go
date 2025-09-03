@@ -15,7 +15,7 @@ import (
 
 var clientGetFoo = cli.Command{
 	Name:            "get_foo",
-	Usage:           "Foo",
+	Usage:           "Get a Foo that has text, a random number, and a list of random numbers.",
 	Flags:           []cli.Flag{},
 	Action:          handleClientGetFoo,
 	HideHelpCommand: true,
@@ -23,7 +23,7 @@ var clientGetFoo = cli.Command{
 
 var clientSetText = cli.Command{
 	Name:  "set_text",
-	Usage: "Set Name",
+	Usage: "Set the text that is returned when getting a Foo.",
 	Flags: []cli.Flag{
 		&jsonflag.JSONStringFlag{
 			Name: "name",
