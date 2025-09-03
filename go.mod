@@ -5,7 +5,7 @@ go 1.23.0
 toolchain go1.24.7
 
 require (
-	github.com/bruce-hill/bruce-test-api-go v0.4.0
+	github.com/bruce-hill/bruce-test-api-go v0.2.0
 	github.com/tidwall/gjson v1.17.0
 	github.com/tidwall/pretty v1.2.1
 	github.com/tidwall/sjson v1.2.5
