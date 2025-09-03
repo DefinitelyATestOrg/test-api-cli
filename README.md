@@ -25,8 +25,7 @@ bruce-test-api [resource] [command] [flags]
 ```
 
 ```sh
-bruce-test-api webhooks register \
-  --url https://example.com
+bruce-test-api foo list
 ```
 
 For details about specific commands, use the `--help` flag.
