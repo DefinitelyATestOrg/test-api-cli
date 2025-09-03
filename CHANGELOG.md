@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.0 (2025-09-03)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/bruce-hill/bruce-test-api-cli/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** manual updates ([4ec4519](https://github.com/bruce-hill/bruce-test-api-cli/commit/4ec4519591dba5e93b250abb3e79b978257a5267))
+* **api:** manual updates ([b0c2e98](https://github.com/bruce-hill/bruce-test-api-cli/commit/b0c2e980bba6cad72ee4ca2a2ee59ef1d605e301))
+* **api:** manual updates ([c5ad8ca](https://github.com/bruce-hill/bruce-test-api-cli/commit/c5ad8ca56111e4c93a8f4f7bdecea4eb8822198c))
+* **api:** manual updates ([993b9ef](https://github.com/bruce-hill/bruce-test-api-cli/commit/993b9efcff83690def572ff5e9fd1c3bdb65c918))
+* **api:** manual updates ([69f9396](https://github.com/bruce-hill/bruce-test-api-cli/commit/69f93968cf21f971afd17da5ee3ceadd17fc7945))
+* **api:** manual updates ([b4c8486](https://github.com/bruce-hill/bruce-test-api-cli/commit/b4c8486f7f815c7c730b32ec68128c225b0363ae))
+* **api:** manual updates ([534f368](https://github.com/bruce-hill/bruce-test-api-cli/commit/534f368be36b01a0c299bf1bd9cfb67f7d812fa8))
+* **api:** manual updates ([bdda8b8](https://github.com/bruce-hill/bruce-test-api-cli/commit/bdda8b858feb5301744d082e9a3b2b07c74cbf61))
+* **api:** manual updates ([45b9363](https://github.com/bruce-hill/bruce-test-api-cli/commit/45b936368816b990164bdb61d9bf50139b8cbaba))
+
 ## 0.1.0 (2025-09-02)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/bruce-hill/bruce-test-api-cli/compare/v0.0.1...v0.1.0)
