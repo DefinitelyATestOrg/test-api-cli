@@ -13,8 +13,16 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var nameSet = cli.Command{
-	Name:  "set",
+var clientGetFoo = cli.Command{
+	Name:            "get_foo",
+	Usage:           "Foo",
+	Flags:           []cli.Flag{},
+	Action:          handleClientGetFoo,
+	HideHelpCommand: true,
+}
+
+var clientSetText = cli.Command{
+	Name:  "set_text",
 	Usage: "Set Name",
 	Flags: []cli.Flag{
 		&jsonflag.JSONStringFlag{
@@ -25,15 +33,26 @@ var nameSet = cli.Command{
 			},
 		},
 	},
-	Action:          handleNameSet,
+	Action:          handleClientSetText,
 	HideHelpCommand: true,
 }
 
-func handleNameSet(ctx context.Context, cmd *cli.Command) error {
+func handleClientGetFoo(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	params := brucetestapi.NameSetParams{}
+	res, err := cc.client.GetFoo(context.TODO(), option.WithMiddleware(cc.AsMiddleware()))
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("%s\n", ColorizeJSON(res.RawJSON(), os.Stdout))
+	return nil
+}
+
+func handleClientSetText(ctx context.Context, cmd *cli.Command) error {
+	cc := getAPICommandContext(cmd)
+	params := brucetestapi.SetTextParams{}
 	res := []byte{}
-	_, err := cc.client.Name.Set(
+	_, err := cc.client.SetText(
 		context.TODO(),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),

@@ -25,7 +25,7 @@ bruce-test-api [resource] [command] [flags]
 ```
 
 ```sh
-bruce-test-api foo list
+bruce-test-api $client get_foo
 ```
 
 For details about specific commands, use the `--help` flag.
