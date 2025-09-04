@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bruce-hill/bruce-test-api-cli/pkg/jsonflag"
-	"github.com/bruce-hill/bruce-test-api-go"
 	"github.com/bruce-hill/bruce-test-api-go/option"
 	"github.com/urfave/cli/v3"
 )
@@ -21,19 +19,11 @@ var clientGetFoo = cli.Command{
 	HideHelpCommand: true,
 }
 
-var clientSetText = cli.Command{
-	Name:  "set_text",
-	Usage: "Set the text that is returned when getting a Foo.",
-	Flags: []cli.Flag{
-		&jsonflag.JSONStringFlag{
-			Name: "name",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "name",
-			},
-		},
-	},
-	Action:          handleClientSetText,
+var clientJsonTest = cli.Command{
+	Name:            "json_test",
+	Usage:           "Get a big JSON response for testing.",
+	Flags:           []cli.Flag{},
+	Action:          handleClientJsonTest,
 	HideHelpCommand: true,
 }
 
@@ -48,13 +38,11 @@ func handleClientGetFoo(ctx context.Context, cmd *cli.Command) error {
 	return nil
 }
 
-func handleClientSetText(ctx context.Context, cmd *cli.Command) error {
+func handleClientJsonTest(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	params := brucetestapi.SetTextParams{}
 	res := []byte{}
-	_, err := cc.client.SetText(
+	_, err := cc.client.JsonTest(
 		context.TODO(),
-		params,
 		option.WithMiddleware(cc.AsMiddleware()),
 		option.WithResponseBodyInto(&res),
 	)
