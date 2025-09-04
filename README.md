@@ -14,6 +14,14 @@ It is generated with [Stainless](https://www.stainless.com/).
 go install 'github.com/bruce-hill/bruce-test-api-cli/cmd/bruce-test-api@latest'
 ```
 
+### Running Locally
+
+<!-- x-release-please-start-version -->
+
+```sh
+go run cmd/bruce-test-api/main.go
+```
+
 <!-- x-release-please-end -->
 
 ## Usage
