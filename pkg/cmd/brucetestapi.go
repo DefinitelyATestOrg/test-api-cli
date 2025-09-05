@@ -12,7 +12,7 @@ import (
 )
 
 var clientGetFoo = cli.Command{
-	Name:            "get_foo",
+	Name:            "get-foo",
 	Usage:           "Get a Foo that has text, a random number, and a list of random numbers.",
 	Flags:           []cli.Flag{},
 	Action:          handleClientGetFoo,
@@ -20,7 +20,7 @@ var clientGetFoo = cli.Command{
 }
 
 var clientJsonTest = cli.Command{
-	Name:            "json_test",
+	Name:            "json-test",
 	Usage:           "Get a big JSON response for testing.",
 	Flags:           []cli.Flag{},
 	Action:          handleClientJsonTest,
