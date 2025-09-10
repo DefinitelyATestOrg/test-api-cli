@@ -43,6 +43,7 @@ func init() {
 				Name:     "foos",
 				Category: "API RESOURCE",
 				Commands: []*cli.Command{
+					&foosCreate,
 					&foosRetrieve,
 					&foosList,
 				},

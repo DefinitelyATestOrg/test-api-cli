@@ -13,6 +13,43 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
+var foosCreate = cli.Command{
+	Name:  "create",
+	Usage: "Add a Foo to the list of all Foos.",
+	Flags: []cli.Flag{
+		&jsonflag.JSONIntFlag{
+			Name: "list-of-nums",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "list_of_nums.#",
+			},
+		},
+		&jsonflag.JSONIntFlag{
+			Name: "+list_of_num",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "list_of_nums.-1",
+			},
+		},
+		&jsonflag.JSONIntFlag{
+			Name: "random-number",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "random_number",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name: "text",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "text",
+			},
+		},
+	},
+	Action:          handleFoosCreate,
+	HideHelpCommand: true,
+}
+
 var foosRetrieve = cli.Command{
 	Name:            "retrieve",
 	Usage:           "Get a Foo that has text, a random number, and a list of random numbers.",
@@ -42,6 +79,24 @@ var foosList = cli.Command{
 	},
 	Action:          handleFoosList,
 	HideHelpCommand: true,
+}
+
+func handleFoosCreate(ctx context.Context, cmd *cli.Command) error {
+	cc := getAPICommandContext(cmd)
+	params := brucetestapi.FooNewParams{}
+	res := []byte{}
+	_, err := cc.client.Foos.New(
+		context.TODO(),
+		params,
+		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithResponseBodyInto(&res),
+	)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("%s\n", ColorizeJSON(string(res), os.Stdout))
+	return nil
 }
 
 func handleFoosRetrieve(ctx context.Context, cmd *cli.Command) error {
