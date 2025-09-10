@@ -31,13 +31,20 @@ func init() {
 			},
 		},
 		Commands: []*cli.Command{
-			&clientGetFoo,
 			&clientJsonTest,
 			{
 				Name:     "text",
 				Category: "API RESOURCE",
 				Commands: []*cli.Command{
 					&textSet,
+				},
+			},
+			{
+				Name:     "foos",
+				Category: "API RESOURCE",
+				Commands: []*cli.Command{
+					&foosRetrieve,
+					&foosList,
 				},
 			},
 			{

@@ -11,31 +11,12 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var clientGetFoo = cli.Command{
-	Name:            "get-foo",
-	Usage:           "Get a Foo that has text, a random number, and a list of random numbers.",
-	Flags:           []cli.Flag{},
-	Action:          handleClientGetFoo,
-	HideHelpCommand: true,
-}
-
 var clientJsonTest = cli.Command{
 	Name:            "json-test",
 	Usage:           "Get a big JSON response for testing.",
 	Flags:           []cli.Flag{},
 	Action:          handleClientJsonTest,
 	HideHelpCommand: true,
-}
-
-func handleClientGetFoo(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
-	res, err := cc.client.GetFoo(context.TODO(), option.WithMiddleware(cc.AsMiddleware()))
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("%s\n", ColorizeJSON(res.RawJSON(), os.Stdout))
-	return nil
 }
 
 func handleClientJsonTest(ctx context.Context, cmd *cli.Command) error {
