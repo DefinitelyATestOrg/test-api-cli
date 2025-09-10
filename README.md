@@ -33,7 +33,7 @@ bruce-test-api [resource] [command] [flags]
 ```
 
 ```sh
-bruce-test-api client get-foo
+bruce-test-api foos retrieve
 ```
 
 For details about specific commands, use the `--help` flag.
