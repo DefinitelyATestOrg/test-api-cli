@@ -4,8 +4,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
-	"os"
 
 	"github.com/bruce-hill/bruce-test-api-go/option"
 	"github.com/urfave/cli/v3"
@@ -31,6 +29,6 @@ func handleClientJsonTest(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
-	fmt.Printf("%s\n", ColorizeJSON(string(res), os.Stdout))
-	return nil
+	format := cmd.Root().String("format")
+	return ShowJSON("client json-test", string(res), format)
 }

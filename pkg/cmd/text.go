@@ -4,8 +4,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
-	"os"
 
 	"github.com/bruce-hill/bruce-test-api-cli/pkg/jsonflag"
 	"github.com/bruce-hill/bruce-test-api-go"
@@ -43,6 +41,6 @@ func handleTextSet(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
-	fmt.Printf("%s\n", ColorizeJSON(string(res), os.Stdout))
-	return nil
+	format := cmd.Root().String("format")
+	return ShowJSON("text set", string(res), format)
 }
