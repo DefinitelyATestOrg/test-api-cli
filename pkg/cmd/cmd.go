@@ -48,21 +48,32 @@ func init() {
 			},
 		},
 		Commands: []*cli.Command{
-			&clientJsonTest,
 			{
-				Name:     "text",
+				Name:     "people",
 				Category: "API RESOURCE",
 				Commands: []*cli.Command{
-					&textSet,
+					&peopleCreate,
+					&peopleRetrieve,
+					&peopleUpdate,
+					&peopleList,
+					&peopleDelete,
 				},
 			},
 			{
-				Name:     "foos",
+				Name:     "people:pets",
 				Category: "API RESOURCE",
 				Commands: []*cli.Command{
-					&foosCreate,
-					&foosRetrieve,
-					&foosList,
+					&peoplePetsCreate,
+					&peoplePetsUpdate,
+					&peoplePetsList,
+					&peoplePetsDelete,
+				},
+			},
+			{
+				Name:     "json-test",
+				Category: "API RESOURCE",
+				Commands: []*cli.Command{
+					&jsonTestRetrieve,
 				},
 			},
 			{

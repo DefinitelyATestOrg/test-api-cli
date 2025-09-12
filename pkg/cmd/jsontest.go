@@ -5,22 +5,22 @@ package cmd
 import (
 	"context"
 
-	"github.com/bruce-hill/bruce-test-api-go/option"
+	"github.com/stainless-sdks/bruce-test-api-go/option"
 	"github.com/urfave/cli/v3"
 )
 
-var clientJsonTest = cli.Command{
-	Name:            "json-test",
+var jsonTestRetrieve = cli.Command{
+	Name:            "retrieve",
 	Usage:           "Get a big JSON response for testing.",
 	Flags:           []cli.Flag{},
-	Action:          handleClientJsonTest,
+	Action:          handleJsonTestRetrieve,
 	HideHelpCommand: true,
 }
 
-func handleClientJsonTest(ctx context.Context, cmd *cli.Command) error {
+func handleJsonTestRetrieve(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	res := []byte{}
-	_, err := cc.client.JsonTest(
+	_, err := cc.client.JsonTest.Get(
 		context.TODO(),
 		option.WithMiddleware(cc.AsMiddleware()),
 		option.WithResponseBodyInto(&res),
@@ -30,5 +30,5 @@ func handleClientJsonTest(ctx context.Context, cmd *cli.Command) error {
 	}
 
 	format := cmd.Root().String("format")
-	return ShowJSON("client json-test", string(res), format)
+	return ShowJSON("json-test retrieve", string(res), format)
 }
