@@ -16,31 +16,38 @@ var peopleCreate = cli.Command{
 	Usage: "Create a new person and add them to the system.",
 	Flags: []cli.Flag{
 		&jsonflag.JSONStringFlag{
-			Name: "name.full",
+			Name: "name.full_name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "name.full",
+				Path: "name.full_name",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.nick",
+			Name: "name.nickname",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "name.nick",
+				Path: "name.nickname",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "pet-names.full",
+			Name: "job",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "pet_names.#.full",
+				Path: "job",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "pet-names.nick",
+			Name: "pet-names.full_name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "pet_names.#.nick",
+				Path: "pet_names.#.full_name",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name: "pet-names.nickname",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "pet_names.#.nickname",
 			},
 		},
 		&jsonflag.JSONAnyFlag{
@@ -77,17 +84,24 @@ var peopleUpdate = cli.Command{
 			Name: "person-id",
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "full",
+			Name: "name.full_name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "full",
+				Path: "name.full_name",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "nick",
+			Name: "name.nickname",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "nick",
+				Path: "name.nickname",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name: "job",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "job",
 			},
 		},
 	},
