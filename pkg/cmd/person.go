@@ -37,24 +37,31 @@ var peopleCreate = cli.Command{
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "pet-names.full_name",
+			Name: "pets.name.full_name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "pet_names.#.full_name",
+				Path: "pets.#.name.full_name",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "pet-names.nickname",
+			Name: "pets.name.nickname",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "pet_names.#.nickname",
+				Path: "pets.#.name.nickname",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name: "pets.species",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "pets.#.species",
 			},
 		},
 		&jsonflag.JSONAnyFlag{
-			Name: "+pet_name",
+			Name: "+pet",
 			Config: jsonflag.JSONConfig{
 				Kind:     jsonflag.Body,
-				Path:     "pet_names.-1",
+				Path:     "pets.-1",
 				SetValue: map[string]interface{}{},
 			},
 			Value: map[string]interface{}{},
