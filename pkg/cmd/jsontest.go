@@ -5,7 +5,7 @@ package cmd
 import (
 	"context"
 
-	"github.com/stainless-sdks/bruce-test-api-go/option"
+	"github.com/bruce-hill/bruce-test-api-go/option"
 	"github.com/urfave/cli/v3"
 )
 
