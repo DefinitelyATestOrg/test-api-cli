@@ -19,17 +19,17 @@ var peoplePetsCreate = cli.Command{
 			Name: "person-id",
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.full",
+			Name: "name.full_name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "name.full",
+				Path: "name.full_name",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.nick",
+			Name: "name.nickname",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "name.nick",
+				Path: "name.nickname",
 			},
 		},
 		&jsonflag.JSONStringFlag{
@@ -55,17 +55,17 @@ var peoplePetsUpdate = cli.Command{
 			Name: "pet-id",
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.full",
+			Name: "name.full_name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "name.full",
+				Path: "name.full_name",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.nick",
+			Name: "name.nickname",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "name.nick",
+				Path: "name.nickname",
 			},
 		},
 		&jsonflag.JSONStringFlag{
