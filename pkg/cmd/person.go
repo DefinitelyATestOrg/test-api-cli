@@ -154,70 +154,78 @@ var peopleDelete = cli.Command{
 func handlePeopleCreate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	params := brucetestapi.PersonNewParams{}
-	res, err := cc.client.People.New(
+	var res []byte
+	_, err := cc.client.People.New(
 		context.TODO(),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
 		return err
 	}
 
 	format := cmd.Root().String("format")
-	return ShowJSON("people create", res.RawJSON(), format)
+	return ShowJSON("people create", string(res), format)
 }
 
 func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	res, err := cc.client.People.Get(
+	var res []byte
+	_, err := cc.client.People.Get(
 		context.TODO(),
 		cmd.Value("person-id").(string),
 		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
 		return err
 	}
 
 	format := cmd.Root().String("format")
-	return ShowJSON("people retrieve", res.RawJSON(), format)
+	return ShowJSON("people retrieve", string(res), format)
 }
 
 func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	params := brucetestapi.PersonUpdateParams{}
-	res, err := cc.client.People.Update(
+	var res []byte
+	_, err := cc.client.People.Update(
 		context.TODO(),
 		cmd.Value("person-id").(string),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
 		return err
 	}
 
 	format := cmd.Root().String("format")
-	return ShowJSON("people update", res.RawJSON(), format)
+	return ShowJSON("people update", string(res), format)
 }
 
 func handlePeopleList(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	params := brucetestapi.PersonListParams{}
-	res, err := cc.client.People.List(
+	var res []byte
+	_, err := cc.client.People.List(
 		context.TODO(),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
 		return err
 	}
 
 	format := cmd.Root().String("format")
-	return ShowJSON("people list", res.RawJSON(), format)
+	return ShowJSON("people list", string(res), format)
 }
 
 func handlePeopleDelete(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	res := []byte{}
+	var res []byte
 	_, err := cc.client.People.Delete(
 		context.TODO(),
 		cmd.Value("person-id").(string),

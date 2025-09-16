@@ -110,18 +110,20 @@ var peoplePetsDelete = cli.Command{
 func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	params := brucetestapi.PersonPetNewParams{}
-	res, err := cc.client.People.Pets.New(
+	var res []byte
+	_, err := cc.client.People.Pets.New(
 		context.TODO(),
 		cmd.Value("person-id").(string),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
 		return err
 	}
 
 	format := cmd.Root().String("format")
-	return ShowJSON("people:pets create", res.RawJSON(), format)
+	return ShowJSON("people:pets create", string(res), format)
 }
 
 func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
@@ -130,23 +132,25 @@ func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
 	if cmd.IsSet("person-id") {
 		params.PersonID = cmd.Value("person-id").(string)
 	}
-	res, err := cc.client.People.Pets.Update(
+	var res []byte
+	_, err := cc.client.People.Pets.Update(
 		context.TODO(),
 		cmd.Value("pet-id").(string),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
 		return err
 	}
 
 	format := cmd.Root().String("format")
-	return ShowJSON("people:pets update", res.RawJSON(), format)
+	return ShowJSON("people:pets update", string(res), format)
 }
 
 func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	res := []byte{}
+	var res []byte
 	_, err := cc.client.People.Pets.List(
 		context.TODO(),
 		cmd.Value("person-id").(string),
@@ -167,7 +171,7 @@ func handlePeoplePetsDelete(ctx context.Context, cmd *cli.Command) error {
 	if cmd.IsSet("person-id") {
 		params.PersonID = cmd.Value("person-id").(string)
 	}
-	res := []byte{}
+	var res []byte
 	_, err := cc.client.People.Pets.Delete(
 		context.TODO(),
 		cmd.Value("pet-id").(string),
