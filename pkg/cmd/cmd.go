@@ -66,7 +66,7 @@ func init() {
 					&peoplePetsCreate,
 					&peoplePetsUpdate,
 					&peoplePetsList,
-					&peoplePetsDelete,
+					&peoplePetsRemove,
 				},
 			},
 			{
