@@ -92,8 +92,8 @@ var peoplePetsList = cli.Command{
 	HideHelpCommand: true,
 }
 
-var peoplePetsDelete = cli.Command{
-	Name:  "delete",
+var peoplePetsQdelete = cli.Command{
+	Name:  "qdelete",
 	Usage: "Remove a pet from a person.",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -103,7 +103,7 @@ var peoplePetsDelete = cli.Command{
 			Name: "pet-id",
 		},
 	},
-	Action:          handlePeoplePetsDelete,
+	Action:          handlePeoplePetsQdelete,
 	HideHelpCommand: true,
 }
 
@@ -165,14 +165,14 @@ func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON("people:pets list", string(res), format)
 }
 
-func handlePeoplePetsDelete(ctx context.Context, cmd *cli.Command) error {
+func handlePeoplePetsQdelete(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	params := brucetestapi.PersonPetDeleteParams{}
+	params := brucetestapi.PersonPetQdeleteParams{}
 	if cmd.IsSet("person-id") {
 		params.PersonID = cmd.Value("person-id").(string)
 	}
 	var res []byte
-	_, err := cc.client.People.Pets.Delete(
+	_, err := cc.client.People.Pets.Qdelete(
 		context.TODO(),
 		cmd.Value("pet-id").(string),
 		params,
@@ -184,5 +184,5 @@ func handlePeoplePetsDelete(ctx context.Context, cmd *cli.Command) error {
 	}
 
 	format := cmd.Root().String("format")
-	return ShowJSON("people:pets delete", string(res), format)
+	return ShowJSON("people:pets qdelete", string(res), format)
 }
