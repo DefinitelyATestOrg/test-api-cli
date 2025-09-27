@@ -4,7 +4,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/bruce-hill/bruce-test-api-go"
 	"github.com/bruce-hill/bruce-test-api-go/option"
@@ -111,14 +110,6 @@ var peoplePetsQdelete = cli.Command{
 
 func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	unusedArgs := cmd.Args().Slice()
-	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
-		cmd.Set("person-id", unusedArgs[0])
-		unusedArgs = unusedArgs[1:]
-	}
-	if len(unusedArgs) > 0 {
-		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
-	}
 	params := brucetestapi.PersonPetNewParams{}
 	var res []byte
 	_, err := cc.client.People.Pets.New(
@@ -140,14 +131,6 @@ func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 
 func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	unusedArgs := cmd.Args().Slice()
-	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {
-		cmd.Set("pet-id", unusedArgs[0])
-		unusedArgs = unusedArgs[1:]
-	}
-	if len(unusedArgs) > 0 {
-		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
-	}
 	params := brucetestapi.PersonPetUpdateParams{}
 	if cmd.IsSet("person-id") {
 		params.PersonID = cmd.Value("person-id").(string)
@@ -172,14 +155,6 @@ func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
 
 func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	unusedArgs := cmd.Args().Slice()
-	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
-		cmd.Set("person-id", unusedArgs[0])
-		unusedArgs = unusedArgs[1:]
-	}
-	if len(unusedArgs) > 0 {
-		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
-	}
 	var res []byte
 	_, err := cc.client.People.Pets.List(
 		context.TODO(),
@@ -199,14 +174,6 @@ func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
 
 func handlePeoplePetsQdelete(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
-	unusedArgs := cmd.Args().Slice()
-	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {
-		cmd.Set("pet-id", unusedArgs[0])
-		unusedArgs = unusedArgs[1:]
-	}
-	if len(unusedArgs) > 0 {
-		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
-	}
 	params := brucetestapi.PersonPetQdeleteParams{}
 	if cmd.IsSet("person-id") {
 		params.PersonID = cmd.Value("person-id").(string)
