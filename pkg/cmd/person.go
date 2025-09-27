@@ -4,6 +4,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/bruce-hill/bruce-test-api-go"
 	"github.com/bruce-hill/bruce-test-api-go/option"
@@ -154,6 +155,10 @@ var peopleDelete = cli.Command{
 
 func handlePeopleCreate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	params := brucetestapi.PersonNewParams{}
 	var res []byte
 	_, err := cc.client.People.New(
@@ -174,6 +179,14 @@ func handlePeopleCreate(ctx context.Context, cmd *cli.Command) error {
 
 func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
+		cmd.Set("person-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	var res []byte
 	_, err := cc.client.People.Get(
 		context.TODO(),
@@ -193,6 +206,14 @@ func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
 
 func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
+		cmd.Set("person-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	params := brucetestapi.PersonUpdateParams{}
 	var res []byte
 	_, err := cc.client.People.Update(
@@ -214,6 +235,10 @@ func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
 
 func handlePeopleList(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	params := brucetestapi.PersonListParams{}
 	var res []byte
 	_, err := cc.client.People.List(
@@ -240,6 +265,14 @@ func handlePeopleList(ctx context.Context, cmd *cli.Command) error {
 
 func handlePeopleDelete(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
+		cmd.Set("person-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	var res []byte
 	_, err := cc.client.People.Delete(
 		context.TODO(),
