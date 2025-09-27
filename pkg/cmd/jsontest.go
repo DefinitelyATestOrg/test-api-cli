@@ -4,8 +4,10 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/bruce-hill/bruce-test-api-go/option"
+	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )
 
@@ -19,6 +21,10 @@ var jsonTestRetrieve = cli.Command{
 
 func handleJsonTestRetrieve(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	var res []byte
 	_, err := cc.client.JsonTest.Get(
 		context.TODO(),
@@ -29,6 +35,8 @@ func handleJsonTestRetrieve(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
-	return ShowJSON("json-test retrieve", string(res), format)
+	transform := cmd.Root().String("transform")
+	return ShowJSON("json-test retrieve", json, format, transform)
 }

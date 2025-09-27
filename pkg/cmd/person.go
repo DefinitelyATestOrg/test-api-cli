@@ -4,10 +4,12 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/bruce-hill/bruce-test-api-go"
 	"github.com/bruce-hill/bruce-test-api-go/option"
 	"github.com/stainless-sdks/bruce-test-api-cli/pkg/jsonflag"
+	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )
 
@@ -153,6 +155,10 @@ var peopleDelete = cli.Command{
 
 func handlePeopleCreate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	params := brucetestapi.PersonNewParams{}
 	var res []byte
 	_, err := cc.client.People.New(
@@ -165,12 +171,22 @@ func handlePeopleCreate(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
-	return ShowJSON("people create", string(res), format)
+	transform := cmd.Root().String("transform")
+	return ShowJSON("people create", json, format, transform)
 }
 
 func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
+		cmd.Set("person-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	var res []byte
 	_, err := cc.client.People.Get(
 		context.TODO(),
@@ -182,12 +198,22 @@ func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
-	return ShowJSON("people retrieve", string(res), format)
+	transform := cmd.Root().String("transform")
+	return ShowJSON("people retrieve", json, format, transform)
 }
 
 func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
+		cmd.Set("person-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	params := brucetestapi.PersonUpdateParams{}
 	var res []byte
 	_, err := cc.client.People.Update(
@@ -201,12 +227,18 @@ func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
-	return ShowJSON("people update", string(res), format)
+	transform := cmd.Root().String("transform")
+	return ShowJSON("people update", json, format, transform)
 }
 
 func handlePeopleList(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	params := brucetestapi.PersonListParams{}
 	var res []byte
 	_, err := cc.client.People.List(
@@ -219,12 +251,28 @@ func handlePeopleList(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
-	format := cmd.Root().String("format")
-	return ShowJSON("people list", string(res), format)
+	json := gjson.Parse(string(res))
+	format := "explore"
+	if cmd.Root().IsSet("format") {
+		format = cmd.Root().String("format")
+	}
+	transform := "items.#.{Name:name.full_name,Nickname:name.nickname,Job:job,Pets:pets.#.{Name:name.full_name,Nickname:name.nickname,Species:species}}"
+	if cmd.Root().IsSet("transform") {
+		transform = cmd.Root().String("transform")
+	}
+	return ShowJSON("people list", json, format, transform)
 }
 
 func handlePeopleDelete(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
+		cmd.Set("person-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	var res []byte
 	_, err := cc.client.People.Delete(
 		context.TODO(),
@@ -236,6 +284,8 @@ func handlePeopleDelete(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
-	return ShowJSON("people delete", string(res), format)
+	transform := cmd.Root().String("transform")
+	return ShowJSON("people delete", json, format, transform)
 }

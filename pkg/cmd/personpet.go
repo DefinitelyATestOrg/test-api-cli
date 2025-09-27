@@ -4,10 +4,12 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/bruce-hill/bruce-test-api-go"
 	"github.com/bruce-hill/bruce-test-api-go/option"
 	"github.com/stainless-sdks/bruce-test-api-cli/pkg/jsonflag"
+	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )
 
@@ -109,6 +111,14 @@ var peoplePetsQdelete = cli.Command{
 
 func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
+		cmd.Set("person-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	params := brucetestapi.PersonPetNewParams{}
 	var res []byte
 	_, err := cc.client.People.Pets.New(
@@ -122,12 +132,22 @@ func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
-	return ShowJSON("people:pets create", string(res), format)
+	transform := cmd.Root().String("transform")
+	return ShowJSON("people:pets create", json, format, transform)
 }
 
 func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {
+		cmd.Set("pet-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	params := brucetestapi.PersonPetUpdateParams{}
 	if cmd.IsSet("person-id") {
 		params.PersonID = cmd.Value("person-id").(string)
@@ -144,12 +164,22 @@ func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
-	return ShowJSON("people:pets update", string(res), format)
+	transform := cmd.Root().String("transform")
+	return ShowJSON("people:pets update", json, format, transform)
 }
 
 func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
+		cmd.Set("person-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	var res []byte
 	_, err := cc.client.People.Pets.List(
 		context.TODO(),
@@ -161,12 +191,22 @@ func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
-	return ShowJSON("people:pets list", string(res), format)
+	transform := cmd.Root().String("transform")
+	return ShowJSON("people:pets list", json, format, transform)
 }
 
 func handlePeoplePetsQdelete(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {
+		cmd.Set("pet-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
 	params := brucetestapi.PersonPetQdeleteParams{}
 	if cmd.IsSet("person-id") {
 		params.PersonID = cmd.Value("person-id").(string)
@@ -183,6 +223,8 @@ func handlePeoplePetsQdelete(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
-	return ShowJSON("people:pets qdelete", string(res), format)
+	transform := cmd.Root().String("transform")
+	return ShowJSON("people:pets qdelete", json, format, transform)
 }
