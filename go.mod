@@ -1,8 +1,6 @@
 module github.com/stainless-sdks/bruce-test-api-cli
 
-go 1.24.0
-
-toolchain go1.24.7
+go 1.25
 
 require (
 	github.com/bruce-hill/bruce-test-api-go v0.17.0
