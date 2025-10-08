@@ -18,28 +18,33 @@ var peoplePetsCreate = cli.Command{
 	Usage: "Add a new pet to an existing person.",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name: "person-id",
+			Name:  "person-id",
+			Usage: "The unique identifier of the person to add a pet to",
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.full_name",
+			Name:  "name.full_name",
+			Usage: "Full name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "name.full_name",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.nickname",
+			Name:  "name.nickname",
+			Usage: "Nickname (if different from full name)",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "name.nickname",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "species",
+			Name:  "species",
+			Usage: "The species of the pet",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "species",
 			},
+			Value: "Unknown",
 		},
 	},
 	Action:          handlePeoplePetsCreate,
@@ -51,27 +56,32 @@ var peoplePetsUpdate = cli.Command{
 	Usage: "Update an existing pet's information.",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name: "person-id",
+			Name:  "person-id",
+			Usage: "The unique identifier of the person who owns the pet",
 		},
 		&cli.StringFlag{
-			Name: "pet-id",
+			Name:  "pet-id",
+			Usage: "The unique identifier of the pet to update",
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.full_name",
+			Name:  "name.full_name",
+			Usage: "Full name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "name.full_name",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.nickname",
+			Name:  "name.nickname",
+			Usage: "Nickname (if different from full name)",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "name.nickname",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "species",
+			Name:  "species",
+			Usage: "The updated species of the pet",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "species",
@@ -87,7 +97,8 @@ var peoplePetsList = cli.Command{
 	Usage: "Get all pets belonging to a specific person by their ID.",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name: "person-id",
+			Name:  "person-id",
+			Usage: "The unique identifier of the person whose pets to retrieve",
 		},
 	},
 	Action:          handlePeoplePetsList,
@@ -99,17 +110,19 @@ var peoplePetsQdelete = cli.Command{
 	Usage: "Remove a pet from a person.",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name: "person-id",
+			Name:  "person-id",
+			Usage: "The unique identifier of the person who owns the pet",
 		},
 		&cli.StringFlag{
-			Name: "pet-id",
+			Name:  "pet-id",
+			Usage: "The unique identifier of the pet to delete",
 		},
 	},
 	Action:          handlePeoplePetsQdelete,
 	HideHelpCommand: true,
 }
 
-func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
+func handlePeoplePetsCreate(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
@@ -138,7 +151,7 @@ func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON("people:pets create", json, format, transform)
 }
 
-func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
+func handlePeoplePetsUpdate(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {
@@ -170,7 +183,7 @@ func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON("people:pets update", json, format, transform)
 }
 
-func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
+func handlePeoplePetsList(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
@@ -197,7 +210,7 @@ func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON("people:pets list", json, format, transform)
 }
 
-func handlePeoplePetsQdelete(ctx context.Context, cmd *cli.Command) error {
+func handlePeoplePetsQdelete(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {

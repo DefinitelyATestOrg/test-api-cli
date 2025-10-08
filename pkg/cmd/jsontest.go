@@ -19,7 +19,7 @@ var jsonTestRetrieve = cli.Command{
 	HideHelpCommand: true,
 }
 
-func handleJsonTestRetrieve(ctx context.Context, cmd *cli.Command) error {
+func handleJsonTestRetrieve(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if len(unusedArgs) > 0 {
