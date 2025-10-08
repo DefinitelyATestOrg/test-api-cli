@@ -18,55 +18,61 @@ var peopleCreate = cli.Command{
 	Usage: "Create a new person and add them to the system.",
 	Flags: []cli.Flag{
 		&jsonflag.JSONStringFlag{
-			Name: "name.full_name",
+			Name:  "name.full_name",
+			Usage: "Full name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "name.full_name",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.nickname",
+			Name:  "name.nickname",
+			Usage: "Nickname (if different from full name)",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "name.nickname",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "job",
+			Name:  "job",
+			Usage: "The person's job",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "job",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "pets.name.full_name",
+			Name:  "pets.name.full_name",
+			Usage: "A list of pets for this person",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "pets.#.name.full_name",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "pets.name.nickname",
+			Name:  "pets.name.nickname",
+			Usage: "A list of pets for this person",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "pets.#.name.nickname",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "pets.species",
+			Name:  "pets.species",
+			Usage: "A list of pets for this person",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "pets.#.species",
 			},
 		},
 		&jsonflag.JSONAnyFlag{
-			Name: "+pet",
+			Name:  "+pet",
+			Usage: "A list of pets for this person",
 			Config: jsonflag.JSONConfig{
 				Kind:     jsonflag.Body,
 				Path:     "pets.-1",
 				SetValue: map[string]interface{}{},
 			},
-			Value: map[string]interface{}{},
 		},
 	},
 	Action:          handlePeopleCreate,
@@ -78,7 +84,8 @@ var peopleRetrieve = cli.Command{
 	Usage: "Get a person's information by ID.",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name: "person-id",
+			Name:  "person-id",
+			Usage: "The unique identifier of the person to retrieve",
 		},
 	},
 	Action:          handlePeopleRetrieve,
@@ -90,24 +97,28 @@ var peopleUpdate = cli.Command{
 	Usage: "Update an existing person's information.",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name: "person-id",
+			Name:  "person-id",
+			Usage: "The unique identifier of the person to update",
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.full_name",
+			Name:  "name.full_name",
+			Usage: "Full name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "name.full_name",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "name.nickname",
+			Name:  "name.nickname",
+			Usage: "Nickname (if different from full name)",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "name.nickname",
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name: "job",
+			Name:  "job",
+			Usage: "The updated job of the person",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "job",
@@ -123,18 +134,22 @@ var peopleList = cli.Command{
 	Usage: "Get a list of all people.",
 	Flags: []cli.Flag{
 		&jsonflag.JSONIntFlag{
-			Name: "page",
+			Name:  "page",
+			Usage: "Page number",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Query,
 				Path: "page",
 			},
+			Value: 1,
 		},
 		&jsonflag.JSONIntFlag{
-			Name: "size",
+			Name:  "size",
+			Usage: "Page size",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Query,
 				Path: "size",
 			},
+			Value: 50,
 		},
 	},
 	Action:          handlePeopleList,
@@ -146,14 +161,15 @@ var peopleDelete = cli.Command{
 	Usage: "Remove a person from the system.",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name: "person-id",
+			Name:  "person-id",
+			Usage: "The unique identifier of the person to delete",
 		},
 	},
 	Action:          handlePeopleDelete,
 	HideHelpCommand: true,
 }
 
-func handlePeopleCreate(ctx context.Context, cmd *cli.Command) error {
+func handlePeopleCreate(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if len(unusedArgs) > 0 {
@@ -177,7 +193,7 @@ func handlePeopleCreate(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON("people create", json, format, transform)
 }
 
-func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
+func handlePeopleRetrieve(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
@@ -204,7 +220,7 @@ func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON("people retrieve", json, format, transform)
 }
 
-func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
+func handlePeopleUpdate(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
@@ -233,7 +249,7 @@ func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON("people update", json, format, transform)
 }
 
-func handlePeopleList(ctx context.Context, cmd *cli.Command) error {
+func handlePeopleList(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if len(unusedArgs) > 0 {
@@ -263,7 +279,7 @@ func handlePeopleList(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON("people list", json, format, transform)
 }
 
-func handlePeopleDelete(ctx context.Context, cmd *cli.Command) error {
+func handlePeopleDelete(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
