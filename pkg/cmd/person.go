@@ -133,6 +133,30 @@ var peopleList = cli.Command{
 	Name:  "list",
 	Usage: "Get a list of all people.",
 	Flags: []cli.Flag{
+		&jsonflag.JSONStringFlag{
+			Name:  "job",
+			Usage: "Job name to search for",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Query,
+				Path: "job",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "name",
+			Usage: "Full name to search for",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Query,
+				Path: "name",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "nickname",
+			Usage: "Nickname to search for",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Query,
+				Path: "nickname",
+			},
+		},
 		&jsonflag.JSONIntFlag{
 			Name:  "page",
 			Usage: "Page number",
@@ -268,14 +292,8 @@ func handlePeopleList(_ context.Context, cmd *cli.Command) error {
 	}
 
 	json := gjson.Parse(string(res))
-	format := "explore"
-	if cmd.Root().IsSet("format") {
-		format = cmd.Root().String("format")
-	}
-	transform := "items.#.{Name:name.full_name,Nickname:name.nickname,Job:job,Pets:pets.#.{Name:name.full_name,Nickname:name.nickname,Species:species}}"
-	if cmd.Root().IsSet("transform") {
-		transform = cmd.Root().String("transform")
-	}
+	format := cmd.Root().String("format")
+	transform := cmd.Root().String("transform")
 	return ShowJSON("people list", json, format, transform)
 }
 
