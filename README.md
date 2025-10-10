@@ -27,8 +27,8 @@ bruce-test-api [resource] [command] [flags]
 ```
 
 ```sh
-bruce-test-api people create \
-  --name.full_name 'Tom Bombadil'
+bruce-test-api people retrieve \
+  --person-id REPLACE_ME
 ```
 
 For details about specific commands, use the `--help` flag.

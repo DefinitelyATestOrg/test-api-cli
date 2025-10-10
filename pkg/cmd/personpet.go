@@ -105,8 +105,8 @@ var peoplePetsList = cli.Command{
 	HideHelpCommand: true,
 }
 
-var peoplePetsQdelete = cli.Command{
-	Name:  "qdelete",
+var peoplePetsDelete = cli.Command{
+	Name:  "delete",
 	Usage: "Remove a pet from a person.",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -118,7 +118,7 @@ var peoplePetsQdelete = cli.Command{
 			Usage: "The unique identifier of the pet to delete",
 		},
 	},
-	Action:          handlePeoplePetsQdelete,
+	Action:          handlePeoplePetsDelete,
 	HideHelpCommand: true,
 }
 
@@ -210,7 +210,7 @@ func handlePeoplePetsList(_ context.Context, cmd *cli.Command) error {
 	return ShowJSON("people:pets list", json, format, transform)
 }
 
-func handlePeoplePetsQdelete(_ context.Context, cmd *cli.Command) error {
+func handlePeoplePetsDelete(_ context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {
@@ -220,12 +220,12 @@ func handlePeoplePetsQdelete(_ context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-	params := brucetestapi.PersonPetQdeleteParams{}
+	params := brucetestapi.PersonPetDeleteParams{}
 	if cmd.IsSet("person-id") {
 		params.PersonID = cmd.Value("person-id").(string)
 	}
 	var res []byte
-	_, err := cc.client.People.Pets.Qdelete(
+	_, err := cc.client.People.Pets.Delete(
 		context.TODO(),
 		cmd.Value("pet-id").(string),
 		params,
@@ -239,5 +239,5 @@ func handlePeoplePetsQdelete(_ context.Context, cmd *cli.Command) error {
 	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON("people:pets qdelete", json, format, transform)
+	return ShowJSON("people:pets delete", json, format, transform)
 }
