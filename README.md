@@ -28,7 +28,7 @@ bruce-test-api [resource] [command] [flags]
 
 ```sh
 bruce-test-api people retrieve \
-  --person-id REPLACE_ME
+  --person-id ID
 ```
 
 For details about specific commands, use the `--help` flag.
