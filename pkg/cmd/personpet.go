@@ -122,7 +122,7 @@ var peoplePetsDelete = cli.Command{
 	HideHelpCommand: true,
 }
 
-func handlePeoplePetsCreate(_ context.Context, cmd *cli.Command) error {
+func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
@@ -135,7 +135,7 @@ func handlePeoplePetsCreate(_ context.Context, cmd *cli.Command) error {
 	params := brucetestapi.PersonPetNewParams{}
 	var res []byte
 	_, err := cc.client.People.Pets.New(
-		context.TODO(),
+		ctx,
 		cmd.Value("person-id").(string),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
@@ -151,7 +151,7 @@ func handlePeoplePetsCreate(_ context.Context, cmd *cli.Command) error {
 	return ShowJSON("people:pets create", json, format, transform)
 }
 
-func handlePeoplePetsUpdate(_ context.Context, cmd *cli.Command) error {
+func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {
@@ -167,7 +167,7 @@ func handlePeoplePetsUpdate(_ context.Context, cmd *cli.Command) error {
 	}
 	var res []byte
 	_, err := cc.client.People.Pets.Update(
-		context.TODO(),
+		ctx,
 		cmd.Value("pet-id").(string),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
@@ -183,7 +183,7 @@ func handlePeoplePetsUpdate(_ context.Context, cmd *cli.Command) error {
 	return ShowJSON("people:pets update", json, format, transform)
 }
 
-func handlePeoplePetsList(_ context.Context, cmd *cli.Command) error {
+func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
@@ -195,7 +195,7 @@ func handlePeoplePetsList(_ context.Context, cmd *cli.Command) error {
 	}
 	var res []byte
 	_, err := cc.client.People.Pets.List(
-		context.TODO(),
+		ctx,
 		cmd.Value("person-id").(string),
 		option.WithMiddleware(cc.AsMiddleware()),
 		option.WithResponseBodyInto(&res),
@@ -210,7 +210,7 @@ func handlePeoplePetsList(_ context.Context, cmd *cli.Command) error {
 	return ShowJSON("people:pets list", json, format, transform)
 }
 
-func handlePeoplePetsDelete(_ context.Context, cmd *cli.Command) error {
+func handlePeoplePetsDelete(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {
@@ -226,7 +226,7 @@ func handlePeoplePetsDelete(_ context.Context, cmd *cli.Command) error {
 	}
 	var res []byte
 	_, err := cc.client.People.Pets.Delete(
-		context.TODO(),
+		ctx,
 		cmd.Value("pet-id").(string),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
