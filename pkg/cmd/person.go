@@ -193,7 +193,7 @@ var peopleDelete = cli.Command{
 	HideHelpCommand: true,
 }
 
-func handlePeopleCreate(_ context.Context, cmd *cli.Command) error {
+func handlePeopleCreate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if len(unusedArgs) > 0 {
@@ -202,7 +202,7 @@ func handlePeopleCreate(_ context.Context, cmd *cli.Command) error {
 	params := brucetestapi.PersonNewParams{}
 	var res []byte
 	_, err := cc.client.People.New(
-		context.TODO(),
+		ctx,
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
 		option.WithResponseBodyInto(&res),
@@ -217,7 +217,7 @@ func handlePeopleCreate(_ context.Context, cmd *cli.Command) error {
 	return ShowJSON("people create", json, format, transform)
 }
 
-func handlePeopleRetrieve(_ context.Context, cmd *cli.Command) error {
+func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
@@ -229,7 +229,7 @@ func handlePeopleRetrieve(_ context.Context, cmd *cli.Command) error {
 	}
 	var res []byte
 	_, err := cc.client.People.Get(
-		context.TODO(),
+		ctx,
 		cmd.Value("person-id").(string),
 		option.WithMiddleware(cc.AsMiddleware()),
 		option.WithResponseBodyInto(&res),
@@ -244,7 +244,7 @@ func handlePeopleRetrieve(_ context.Context, cmd *cli.Command) error {
 	return ShowJSON("people retrieve", json, format, transform)
 }
 
-func handlePeopleUpdate(_ context.Context, cmd *cli.Command) error {
+func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
@@ -257,7 +257,7 @@ func handlePeopleUpdate(_ context.Context, cmd *cli.Command) error {
 	params := brucetestapi.PersonUpdateParams{}
 	var res []byte
 	_, err := cc.client.People.Update(
-		context.TODO(),
+		ctx,
 		cmd.Value("person-id").(string),
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
@@ -273,7 +273,7 @@ func handlePeopleUpdate(_ context.Context, cmd *cli.Command) error {
 	return ShowJSON("people update", json, format, transform)
 }
 
-func handlePeopleList(_ context.Context, cmd *cli.Command) error {
+func handlePeopleList(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if len(unusedArgs) > 0 {
@@ -282,7 +282,7 @@ func handlePeopleList(_ context.Context, cmd *cli.Command) error {
 	params := brucetestapi.PersonListParams{}
 	var res []byte
 	_, err := cc.client.People.List(
-		context.TODO(),
+		ctx,
 		params,
 		option.WithMiddleware(cc.AsMiddleware()),
 		option.WithResponseBodyInto(&res),
@@ -297,7 +297,7 @@ func handlePeopleList(_ context.Context, cmd *cli.Command) error {
 	return ShowJSON("people list", json, format, transform)
 }
 
-func handlePeopleDelete(_ context.Context, cmd *cli.Command) error {
+func handlePeopleDelete(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
@@ -309,7 +309,7 @@ func handlePeopleDelete(_ context.Context, cmd *cli.Command) error {
 	}
 	var res []byte
 	_, err := cc.client.People.Delete(
-		context.TODO(),
+		ctx,
 		cmd.Value("person-id").(string),
 		option.WithMiddleware(cc.AsMiddleware()),
 		option.WithResponseBodyInto(&res),
