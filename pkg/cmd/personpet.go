@@ -51,6 +51,27 @@ var peoplePetsCreate = cli.Command{
 	HideHelpCommand: true,
 }
 
+var peoplePetsRetrieve = cli.Command{
+	Name:  "retrieve",
+	Usage: "Get a pet from a person.",
+	Flags: []cli.Flag{
+		&cli.StringFlag{
+			Name:  "person-id",
+			Usage: "The unique identifier of the person to update",
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "pet-name",
+			Usage: "The pet's name",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Query,
+				Path: "pet_name",
+			},
+		},
+	},
+	Action:          handlePeoplePetsRetrieve,
+	HideHelpCommand: true,
+}
+
 var peoplePetsUpdate = cli.Command{
 	Name:  "update",
 	Usage: "Update an existing pet's information.",
@@ -149,6 +170,35 @@ func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
 	return ShowJSON("people:pets create", json, format, transform)
+}
+
+func handlePeoplePetsRetrieve(ctx context.Context, cmd *cli.Command) error {
+	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
+		cmd.Set("person-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
+	params := brucetestapi.PersonPetGetParams{}
+	var res []byte
+	_, err := cc.client.People.Pets.Get(
+		ctx,
+		cmd.Value("person-id").(string),
+		params,
+		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithResponseBodyInto(&res),
+	)
+	if err != nil {
+		return err
+	}
+
+	json := gjson.Parse(string(res))
+	format := cmd.Root().String("format")
+	transform := cmd.Root().String("transform")
+	return ShowJSON("people:pets retrieve", json, format, transform)
 }
 
 func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
