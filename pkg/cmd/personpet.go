@@ -51,27 +51,6 @@ var peoplePetsCreate = cli.Command{
 	HideHelpCommand: true,
 }
 
-var peoplePetsRetrieve = cli.Command{
-	Name:  "retrieve",
-	Usage: "Get a pet from a person.",
-	Flags: []cli.Flag{
-		&cli.StringFlag{
-			Name:  "person-id",
-			Usage: "The unique identifier of the person to update",
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "pet-name",
-			Usage: "The pet's name",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "pet_name",
-			},
-		},
-	},
-	Action:          handlePeoplePetsRetrieve,
-	HideHelpCommand: true,
-}
-
 var peoplePetsUpdate = cli.Command{
 	Name:  "update",
 	Usage: "Update an existing pet's information.",
@@ -143,8 +122,29 @@ var peoplePetsDelete = cli.Command{
 	HideHelpCommand: true,
 }
 
-var peoplePetsRetrieve2 = cli.Command{
-	Name:  "retrieve2",
+var peoplePetsFnord = cli.Command{
+	Name:  "fnord",
+	Usage: "Get a pet from a person.",
+	Flags: []cli.Flag{
+		&cli.StringFlag{
+			Name:  "person-id",
+			Usage: "The unique identifier of the person to update",
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "pet-name",
+			Usage: "The pet's name",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Query,
+				Path: "pet_name",
+			},
+		},
+	},
+	Action:          handlePeoplePetsFnord,
+	HideHelpCommand: true,
+}
+
+var peoplePetsFrob = cli.Command{
+	Name:  "frob",
 	Usage: "Get a pet from a person.",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -168,7 +168,7 @@ var peoplePetsRetrieve2 = cli.Command{
 			},
 		},
 	},
-	Action:          handlePeoplePetsRetrieve2,
+	Action:          handlePeoplePetsFrob,
 	HideHelpCommand: true,
 }
 
@@ -199,35 +199,6 @@ func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
 	return ShowJSON("people:pets create", json, format, transform)
-}
-
-func handlePeoplePetsRetrieve(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
-	unusedArgs := cmd.Args().Slice()
-	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
-		cmd.Set("person-id", unusedArgs[0])
-		unusedArgs = unusedArgs[1:]
-	}
-	if len(unusedArgs) > 0 {
-		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
-	}
-	params := brucetestapi.PersonPetGetParams{}
-	var res []byte
-	_, err := cc.client.People.Pets.Get(
-		ctx,
-		cmd.Value("person-id").(string),
-		params,
-		option.WithMiddleware(cc.AsMiddleware()),
-		option.WithResponseBodyInto(&res),
-	)
-	if err != nil {
-		return err
-	}
-
-	json := gjson.Parse(string(res))
-	format := cmd.Root().String("format")
-	transform := cmd.Root().String("transform")
-	return ShowJSON("people:pets retrieve", json, format, transform)
 }
 
 func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
@@ -321,7 +292,7 @@ func handlePeoplePetsDelete(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON("people:pets delete", json, format, transform)
 }
 
-func handlePeoplePetsRetrieve2(ctx context.Context, cmd *cli.Command) error {
+func handlePeoplePetsFnord(ctx context.Context, cmd *cli.Command) error {
 	cc := getAPICommandContext(cmd)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
@@ -331,9 +302,9 @@ func handlePeoplePetsRetrieve2(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-	params := brucetestapi.PersonPetRetrieve2Params{}
+	params := brucetestapi.PersonPetFnordParams{}
 	var res []byte
-	_, err := cc.client.People.Pets.Retrieve2(
+	_, err := cc.client.People.Pets.Fnord(
 		ctx,
 		cmd.Value("person-id").(string),
 		params,
@@ -347,5 +318,34 @@ func handlePeoplePetsRetrieve2(ctx context.Context, cmd *cli.Command) error {
 	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON("people:pets retrieve2", json, format, transform)
+	return ShowJSON("people:pets fnord", json, format, transform)
+}
+
+func handlePeoplePetsFrob(ctx context.Context, cmd *cli.Command) error {
+	cc := getAPICommandContext(cmd)
+	unusedArgs := cmd.Args().Slice()
+	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
+		cmd.Set("person-id", unusedArgs[0])
+		unusedArgs = unusedArgs[1:]
+	}
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
+	params := brucetestapi.PersonPetFrobParams{}
+	var res []byte
+	_, err := cc.client.People.Pets.Frob(
+		ctx,
+		cmd.Value("person-id").(string),
+		params,
+		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithResponseBodyInto(&res),
+	)
+	if err != nil {
+		return err
+	}
+
+	json := gjson.Parse(string(res))
+	format := cmd.Root().String("format")
+	transform := cmd.Root().String("transform")
+	return ShowJSON("people:pets frob", json, format, transform)
 }
