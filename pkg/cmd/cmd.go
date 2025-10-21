@@ -83,11 +83,11 @@ func init() {
 				Category: "API RESOURCE",
 				Commands: []*cli.Command{
 					&peoplePetsCreate,
-					&peoplePetsRetrieve,
 					&peoplePetsUpdate,
 					&peoplePetsList,
 					&peoplePetsDelete,
-					&peoplePetsRetrieve2,
+					&peoplePetsFnord,
+					&peoplePetsFrob,
 				},
 			},
 			{
