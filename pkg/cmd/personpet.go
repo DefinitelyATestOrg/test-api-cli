@@ -167,6 +167,14 @@ var peoplePetsFrob = cli.Command{
 				Path: "frob",
 			},
 		},
+		&jsonflag.JSONStringFlag{
+			Name:  "grop",
+			Usage: "The pet's grop",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Query,
+				Path: "grop",
+			},
+		},
 	},
 	Action:          handlePeoplePetsFrob,
 	HideHelpCommand: true,
