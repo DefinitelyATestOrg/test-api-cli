@@ -27,8 +27,7 @@ bruce-test-api [resource] [command] [flags]
 ```
 
 ```sh
-bruce-test-api people retrieve \
-  --person-id ID
+bruce-test-api people list
 ```
 
 For details about specific commands, use the `--help` flag.
