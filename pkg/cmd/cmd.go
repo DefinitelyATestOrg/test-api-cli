@@ -67,6 +67,7 @@ func init() {
 			},
 		},
 		Commands: []*cli.Command{
+			&clientFnord,
 			{
 				Name:     "people",
 				Category: "API RESOURCE",
