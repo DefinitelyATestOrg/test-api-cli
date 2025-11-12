@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/bruce-hill/bruce-test-api-go/option"
+	"github.com/stainless-sdks/bruce-test-api-go/option"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )
