@@ -33,8 +33,9 @@ bruce-test-api client post-fnord \
   --array-items 1 \
   --+array-item \
   --array-items 2 \
-  --full-name 'Abraham Lincoln' \
-  --nickname 'Honest Abe'
+  --name.full_name 'Abraham Lincoln' \
+  --name.nickname 'Honest Abe' \
+  --job President
 ```
 
 For details about specific commands, use the `--help` flag.

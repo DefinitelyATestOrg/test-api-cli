@@ -83,11 +83,19 @@ var clientPostFnord = cli.Command{
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name:  "full-name",
+			Name:  "name.full_name",
 			Usage: "Full name",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "full_name",
+				Path: "name.full_name",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "name.nickname",
+			Usage: "Nickname (if different from full name)",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "name.nickname",
 			},
 		},
 		&jsonflag.JSONStringFlag{
@@ -99,11 +107,60 @@ var clientPostFnord = cli.Command{
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name:  "nickname",
-			Usage: "Nickname (if different from full name)",
+			Name:  "image-base64",
+			Usage: "Image of the person (base64)",
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
-				Path: "nickname",
+				Path: "image_base64",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "image-binary",
+			Usage: "Image of the person (binary)",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "image_binary",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "job",
+			Usage: "The person's job",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "job",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "pets.name.full_name",
+			Usage: "A list of pets for this person",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "pets.#.name.full_name",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "pets.name.nickname",
+			Usage: "A list of pets for this person",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "pets.#.name.nickname",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "pets.species",
+			Usage: "A list of pets for this person",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "pets.#.species",
+			},
+		},
+		&jsonflag.JSONAnyFlag{
+			Name:  "+pet",
+			Usage: "A list of pets for this person",
+			Config: jsonflag.JSONConfig{
+				Kind:     jsonflag.Body,
+				Path:     "pets.-1",
+				SetValue: map[string]interface{}{},
 			},
 		},
 	},
