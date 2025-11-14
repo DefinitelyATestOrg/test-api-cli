@@ -99,22 +99,6 @@ var clientPostFnord = cli.Command{
 			},
 		},
 		&jsonflag.JSONStringFlag{
-			Name:  "image-base64",
-			Usage: "Image of the name",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "image_base64",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "image-binary",
-			Usage: "Image of the name",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "image_binary",
-			},
-		},
-		&jsonflag.JSONStringFlag{
 			Name:  "nickname",
 			Usage: "Nickname (if different from full name)",
 			Config: jsonflag.JSONConfig{
