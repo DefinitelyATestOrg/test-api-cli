@@ -34,6 +34,22 @@ var peopleCreate = cli.Command{
 			},
 		},
 		&jsonflag.JSONStringFlag{
+			Name:  "image-base64",
+			Usage: "Image of the person (base64)",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "image_base64",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "image-binary",
+			Usage: "Image of the person (binary)",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "image_binary",
+			},
+		},
+		&jsonflag.JSONStringFlag{
 			Name:  "job",
 			Usage: "The person's job",
 			Config: jsonflag.JSONConfig{
