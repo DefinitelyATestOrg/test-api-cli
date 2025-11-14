@@ -27,7 +27,14 @@ bruce-test-api [resource] [command] [flags]
 ```
 
 ```sh
-bruce-test-api people list
+bruce-test-api client post-fnord \
+  --first-pos A \
+  --second-pos B \
+  --array-items 1 \
+  --+array-item \
+  --array-items 2 \
+  --full-name 'Abraham Lincoln' \
+  --nickname 'Honest Abe'
 ```
 
 For details about specific commands, use the `--help` flag.
