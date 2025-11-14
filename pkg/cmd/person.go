@@ -26,6 +26,22 @@ var peopleCreate = cli.Command{
 			},
 		},
 		&jsonflag.JSONStringFlag{
+			Name:  "name.image_base64",
+			Usage: "Image of the name",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "name.image_base64",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "name.image_binary",
+			Usage: "Image of the name",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "name.image_binary",
+			},
+		},
+		&jsonflag.JSONStringFlag{
 			Name:  "name.nickname",
 			Usage: "Nickname (if different from full name)",
 			Config: jsonflag.JSONConfig{
@@ -47,6 +63,22 @@ var peopleCreate = cli.Command{
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "pets.#.name.full_name",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "pets.name.image_base64",
+			Usage: "A list of pets for this person",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "pets.#.name.image_base64",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "pets.name.image_binary",
+			Usage: "A list of pets for this person",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "pets.#.name.image_binary",
 			},
 		},
 		&jsonflag.JSONStringFlag{
@@ -106,6 +138,22 @@ var peopleUpdate = cli.Command{
 			Config: jsonflag.JSONConfig{
 				Kind: jsonflag.Body,
 				Path: "name.full_name",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "name.image_base64",
+			Usage: "Image of the name",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "name.image_base64",
+			},
+		},
+		&jsonflag.JSONStringFlag{
+			Name:  "name.image_binary",
+			Usage: "Image of the name",
+			Config: jsonflag.JSONConfig{
+				Kind: jsonflag.Body,
+				Path: "name.image_binary",
 			},
 		},
 		&jsonflag.JSONStringFlag{
