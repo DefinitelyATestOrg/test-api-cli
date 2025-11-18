@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stainless-sdks/bruce-test-api-cli/pkg/jsonflag"
 	"github.com/stainless-sdks/bruce-test-api-go"
 	"github.com/stainless-sdks/bruce-test-api-go/option"
 	"github.com/tidwall/gjson"
@@ -17,78 +16,21 @@ var peopleCreate = cli.Command{
 	Name:  "create",
 	Usage: "Create a new person and add them to the system.",
 	Flags: []cli.Flag{
-		&jsonflag.JSONStringFlag{
-			Name:  "name.full_name",
-			Usage: "Full name",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "name.full_name",
-			},
+		&cli.GenericFlag{
+			Name:      "image-base64",
+			Usage:     "Image of the person (base64)",
+			Value:     &fileReader{Base64Encoded: true},
+			TakesFile: true,
 		},
-		&jsonflag.JSONStringFlag{
-			Name:  "name.nickname",
-			Usage: "Nickname (if different from full name)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "name.nickname",
-			},
+		&cli.GenericFlag{
+			Name:      "image-binary",
+			Usage:     "Image of the person (binary)",
+			Value:     &fileReader{},
+			TakesFile: true,
 		},
-		&jsonflag.JSONStringFlag{
-			Name:  "image-base64",
-			Usage: "Image of the person (base64)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "image_base64",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "image-binary",
-			Usage: "Image of the person (binary)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "image_binary",
-			},
-		},
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "job",
 			Usage: "The person's job",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "job",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "pets.name.full_name",
-			Usage: "A list of pets for this person",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "pets.#.name.full_name",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "pets.name.nickname",
-			Usage: "A list of pets for this person",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "pets.#.name.nickname",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "pets.species",
-			Usage: "A list of pets for this person",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "pets.#.species",
-			},
-		},
-		&jsonflag.JSONAnyFlag{
-			Name:  "+pet",
-			Usage: "A list of pets for this person",
-			Config: jsonflag.JSONConfig{
-				Kind:     jsonflag.Body,
-				Path:     "pets.-1",
-				SetValue: map[string]interface{}{},
-			},
 		},
 	},
 	Action:          handlePeopleCreate,
@@ -116,29 +58,9 @@ var peopleUpdate = cli.Command{
 			Name:  "person-id",
 			Usage: "The unique identifier of the person to update",
 		},
-		&jsonflag.JSONStringFlag{
-			Name:  "name.full_name",
-			Usage: "Full name",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "name.full_name",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "name.nickname",
-			Usage: "Nickname (if different from full name)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "name.nickname",
-			},
-		},
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "job",
 			Usage: "The updated job of the person",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "job",
-			},
 		},
 	},
 	Action:          handlePeopleUpdate,
@@ -149,46 +71,28 @@ var peopleList = cli.Command{
 	Name:  "list",
 	Usage: "Get a list of all people.",
 	Flags: []cli.Flag{
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "job",
 			Usage: "Job name to search for",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "job",
-			},
 		},
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "name",
 			Usage: "Full name to search for",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "name",
-			},
 		},
-		&jsonflag.JSONStringFlag{
-			Name:  "nickname",
-			Usage: "Nickname to search for",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "nickname",
-			},
+		&cli.GenericFlag{
+			Name:      "nickname",
+			Usage:     "Nickname to search for",
+			Value:     &fileReader{Base64Encoded: true},
+			TakesFile: true,
 		},
-		&jsonflag.JSONIntFlag{
+		&cli.Int64Flag{
 			Name:  "page",
 			Usage: "Page number",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "page",
-			},
 			Value: 1,
 		},
-		&jsonflag.JSONIntFlag{
+		&cli.Int64Flag{
 			Name:  "size",
 			Usage: "Page size",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "size",
-			},
 			Value: 50,
 		},
 	},
@@ -210,17 +114,24 @@ var peopleDelete = cli.Command{
 }
 
 func handlePeopleCreate(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	params := brucetestapi.PersonNewParams{}
+	if err := unmarshalStdinWithFlags(cmd, map[string]string{
+		"image-base64": "image_base64",
+		"image-binary": "image_binary",
+		"job":          "job",
+	}, &params); err != nil {
+		return err
+	}
 	var res []byte
-	_, err := cc.client.People.New(
+	_, err := client.People.New(
 		ctx,
 		params,
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -234,7 +145,7 @@ func handlePeopleCreate(ctx context.Context, cmd *cli.Command) error {
 }
 
 func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
 		cmd.Set("person-id", unusedArgs[0])
@@ -244,10 +155,10 @@ func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	var res []byte
-	_, err := cc.client.People.Get(
+	_, err := client.People.Get(
 		ctx,
 		cmd.Value("person-id").(string),
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -261,7 +172,7 @@ func handlePeopleRetrieve(ctx context.Context, cmd *cli.Command) error {
 }
 
 func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
 		cmd.Set("person-id", unusedArgs[0])
@@ -271,12 +182,17 @@ func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	params := brucetestapi.PersonUpdateParams{}
+	if err := unmarshalStdinWithFlags(cmd, map[string]string{
+		"job": "job",
+	}, &params); err != nil {
+		return err
+	}
 	var res []byte
-	_, err := cc.client.People.Update(
+	_, err := client.People.Update(
 		ctx,
 		cmd.Value("person-id").(string),
 		params,
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -290,17 +206,32 @@ func handlePeopleUpdate(ctx context.Context, cmd *cli.Command) error {
 }
 
 func handlePeopleList(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	params := brucetestapi.PersonListParams{}
+	if cmd.IsSet("job") {
+		params.Job = brucetestapi.Opt(cmd.Value("job").(string))
+	}
+	if cmd.IsSet("name") {
+		params.Name = brucetestapi.Opt(cmd.Value("name").(string))
+	}
+	if cmd.IsSet("nickname") {
+		params.Nickname = brucetestapi.Opt(cmd.Value("nickname").(string))
+	}
+	if cmd.IsSet("page") {
+		params.Page = brucetestapi.Opt(cmd.Value("page").(int64))
+	}
+	if cmd.IsSet("size") {
+		params.Size = brucetestapi.Opt(cmd.Value("size").(int64))
+	}
 	var res []byte
-	_, err := cc.client.People.List(
+	_, err := client.People.List(
 		ctx,
 		params,
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -314,7 +245,7 @@ func handlePeopleList(ctx context.Context, cmd *cli.Command) error {
 }
 
 func handlePeopleDelete(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
 		cmd.Set("person-id", unusedArgs[0])
@@ -324,10 +255,10 @@ func handlePeopleDelete(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	var res []byte
-	_, err := cc.client.People.Delete(
+	_, err := client.People.Delete(
 		ctx,
 		cmd.Value("person-id").(string),
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {

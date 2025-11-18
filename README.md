@@ -27,15 +27,20 @@ bruce-test-api [resource] [command] [flags]
 ```
 
 ```sh
-bruce-test-api client post-fnord \
+bruce-test-api post-fnord \
   --first-pos A \
   --second-pos B \
-  --array-items 1 \
-  --+array-item \
-  --array-items 2 \
-  --name.full_name 'Abraham Lincoln' \
-  --name.nickname 'Honest Abe' \
-  --job President
+  --array-item 1 \
+  --array-item 2 \
+  --job President \
+<<JSON
+{
+  "name": {
+    "full_name": "Abraham Lincoln",
+    "nickname": "Honest Abe"
+  }
+}
+JSON
 ```
 
 For details about specific commands, use the `--help` flag.

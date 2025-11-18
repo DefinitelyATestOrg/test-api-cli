@@ -6,14 +6,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stainless-sdks/bruce-test-api-cli/pkg/jsonflag"
 	"github.com/stainless-sdks/bruce-test-api-go"
 	"github.com/stainless-sdks/bruce-test-api-go/option"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )
 
-var clientFnord = cli.Command{
+var fnord = cli.Command{
 	Name:  "fnord",
 	Usage: "Test GET endpoint for positional and query params.",
 	Flags: []cli.Flag{
@@ -25,36 +24,20 @@ var clientFnord = cli.Command{
 			Name:  "second-pos",
 			Usage: "The second positional arg",
 		},
-		&jsonflag.JSONIntFlag{
+		&cli.Int64SliceFlag{
 			Name:  "first-query",
 			Usage: "The first query param (required)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "first_query.#",
-			},
 		},
-		&jsonflag.JSONIntFlag{
-			Name:  "+first-query",
-			Usage: "The first query param (required)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "first_query.-1",
-			},
-		},
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "second-query",
 			Usage: "The second query param (optional)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "second_query",
-			},
 		},
 	},
-	Action:          handleClientFnord,
+	Action:          handleFnord,
 	HideHelpCommand: true,
 }
 
-var clientPostFnord = cli.Command{
+var postFnord = cli.Command{
 	Name:  "post-fnord",
 	Usage: "Test POST endpoint for positional and query params.",
 	Flags: []cli.Flag{
@@ -66,153 +49,64 @@ var clientPostFnord = cli.Command{
 			Name:  "second-pos",
 			Usage: "The second positional arg",
 		},
-		&jsonflag.JSONIntFlag{
-			Name:  "array-items",
+		&cli.Int64SliceFlag{
+			Name:  "array-item",
 			Usage: "The first query param (required)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "array_items.#",
-			},
 		},
-		&jsonflag.JSONIntFlag{
-			Name:  "+array-item",
-			Usage: "The first query param (required)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "array_items.-1",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "name.full_name",
-			Usage: "Full name",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "name.full_name",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "name.nickname",
-			Usage: "Nickname (if different from full name)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "name.nickname",
-			},
-		},
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "second-query",
 			Usage: "The second query param (optional)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "second_query",
-			},
 		},
-		&jsonflag.JSONStringFlag{
-			Name:  "image-base64",
-			Usage: "Image of the person (base64)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "image_base64",
-			},
+		&cli.GenericFlag{
+			Name:      "image-base64",
+			Usage:     "Image of the person (base64)",
+			Value:     &fileReader{Base64Encoded: true},
+			TakesFile: true,
 		},
-		&jsonflag.JSONStringFlag{
-			Name:  "image-binary",
-			Usage: "Image of the person (binary)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "image_binary",
-			},
+		&cli.GenericFlag{
+			Name:      "image-binary",
+			Usage:     "Image of the person (binary)",
+			Value:     &fileReader{},
+			TakesFile: true,
 		},
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "job",
 			Usage: "The person's job",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "job",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "pets.name.full_name",
-			Usage: "A list of pets for this person",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "pets.#.name.full_name",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "pets.name.nickname",
-			Usage: "A list of pets for this person",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "pets.#.name.nickname",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "pets.species",
-			Usage: "A list of pets for this person",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "pets.#.species",
-			},
-		},
-		&jsonflag.JSONAnyFlag{
-			Name:  "+pet",
-			Usage: "A list of pets for this person",
-			Config: jsonflag.JSONConfig{
-				Kind:     jsonflag.Body,
-				Path:     "pets.-1",
-				SetValue: map[string]interface{}{},
-			},
 		},
 	},
-	Action:          handleClientPostFnord,
+	Action:          handlePostFnord,
 	HideHelpCommand: true,
 }
 
-var clientTestForm = cli.Command{
+var testForm = cli.Command{
 	Name:  "test-form",
 	Usage: "Test endpoint that accepts form-encoded data.",
 	Flags: []cli.Flag{
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "email",
 			Usage: "Email",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "email",
-			},
 		},
-		&jsonflag.JSONStringFlag{
-			Name:  "username",
-			Usage: "Username",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "username",
-			},
+		&cli.GenericFlag{
+			Name:      "username",
+			Usage:     "Username",
+			Value:     &fileReader{Base64Encoded: true},
+			TakesFile: true,
 		},
-		&jsonflag.JSONIntFlag{
+		&cli.Int64Flag{
 			Name:  "age",
 			Usage: "Age",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "age",
-			},
 		},
-		&jsonflag.JSONBoolFlag{
+		&cli.BoolFlag{
 			Name:  "subscribe",
 			Usage: "Subscribe",
-			Config: jsonflag.JSONConfig{
-				Kind:     jsonflag.Body,
-				Path:     "subscribe",
-				SetValue: true,
-			},
-			Value: false,
 		},
 	},
-	Action:          handleClientTestForm,
+	Action:          handleTestForm,
 	HideHelpCommand: true,
 }
 
-func handleClientFnord(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+func handleFnord(ctx context.Context, cmd *cli.Command) error {
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("second-pos") && len(unusedArgs) > 0 {
 		cmd.Set("second-pos", unusedArgs[0])
@@ -221,16 +115,22 @@ func handleClientFnord(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-	params := brucetestapi.FnordParams{}
+	params := brucetestapi.FnordParams{
+		FirstPos:   cmd.Value("first-pos").(string),
+		FirstQuery: cmd.Value("first-query").([]int64),
+	}
+	if cmd.IsSet("second-query") {
+		params.SecondQuery = brucetestapi.Opt(cmd.Value("second-query").(string))
+	}
 	if cmd.IsSet("first-pos") {
 		params.FirstPos = cmd.Value("first-pos").(string)
 	}
 	var res []byte
-	_, err := cc.client.Fnord(
+	_, err := client.Fnord(
 		ctx,
 		cmd.Value("second-pos").(string),
 		params,
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -240,11 +140,11 @@ func handleClientFnord(ctx context.Context, cmd *cli.Command) error {
 	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON("client fnord", json, format, transform)
+	return ShowJSON("fnord", json, format, transform)
 }
 
-func handleClientPostFnord(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+func handlePostFnord(ctx context.Context, cmd *cli.Command) error {
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("second-pos") && len(unusedArgs) > 0 {
 		cmd.Set("second-pos", unusedArgs[0])
@@ -253,16 +153,29 @@ func handleClientPostFnord(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-	params := brucetestapi.PostFnordParams{}
+	params := brucetestapi.PostFnordParams{
+		FirstPos:   cmd.Value("first-pos").(string),
+		ArrayItems: cmd.Value("array-item").([]int64),
+	}
+	if cmd.IsSet("second-query") {
+		params.SecondQuery = brucetestapi.Opt(cmd.Value("second-query").(string))
+	}
+	if err := unmarshalStdinWithFlags(cmd, map[string]string{
+		"image-base64": "image_base64",
+		"image-binary": "image_binary",
+		"job":          "job",
+	}, &params); err != nil {
+		return err
+	}
 	if cmd.IsSet("first-pos") {
 		params.FirstPos = cmd.Value("first-pos").(string)
 	}
 	var res []byte
-	_, err := cc.client.PostFnord(
+	_, err := client.PostFnord(
 		ctx,
 		cmd.Value("second-pos").(string),
 		params,
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -272,21 +185,29 @@ func handleClientPostFnord(ctx context.Context, cmd *cli.Command) error {
 	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON("client post-fnord", json, format, transform)
+	return ShowJSON("post-fnord", json, format, transform)
 }
 
-func handleClientTestForm(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+func handleTestForm(ctx context.Context, cmd *cli.Command) error {
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	params := brucetestapi.TestFormParams{}
+	if err := unmarshalStdinWithFlags(cmd, map[string]string{
+		"email":     "email",
+		"username":  "username",
+		"age":       "age",
+		"subscribe": "subscribe",
+	}, &params); err != nil {
+		return err
+	}
 	var res []byte
-	_, err := cc.client.TestForm(
+	_, err := client.TestForm(
 		ctx,
 		params,
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -296,5 +217,5 @@ func handleClientTestForm(ctx context.Context, cmd *cli.Command) error {
 	json := gjson.Parse(string(res))
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON("client test-form", json, format, transform)
+	return ShowJSON("test-form", json, format, transform)
 }

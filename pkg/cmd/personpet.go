@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stainless-sdks/bruce-test-api-cli/pkg/jsonflag"
 	"github.com/stainless-sdks/bruce-test-api-go"
 	"github.com/stainless-sdks/bruce-test-api-go/option"
 	"github.com/tidwall/gjson"
@@ -21,29 +20,9 @@ var peoplePetsCreate = cli.Command{
 			Name:  "person-id",
 			Usage: "The unique identifier of the person to add a pet to",
 		},
-		&jsonflag.JSONStringFlag{
-			Name:  "name.full_name",
-			Usage: "Full name",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "name.full_name",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "name.nickname",
-			Usage: "Nickname (if different from full name)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "name.nickname",
-			},
-		},
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "species",
 			Usage: "The species of the pet",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "species",
-			},
 			Value: "Unknown",
 		},
 	},
@@ -59,13 +38,9 @@ var peoplePetsRetrieve = cli.Command{
 			Name:  "person-id",
 			Usage: "The unique identifier of the person to update",
 		},
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "pet-name",
 			Usage: "The pet's name",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Query,
-				Path: "pet_name",
-			},
 		},
 	},
 	Action:          handlePeoplePetsRetrieve,
@@ -84,29 +59,9 @@ var peoplePetsUpdate = cli.Command{
 			Name:  "pet-id",
 			Usage: "The unique identifier of the pet to update",
 		},
-		&jsonflag.JSONStringFlag{
-			Name:  "name.full_name",
-			Usage: "Full name",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "name.full_name",
-			},
-		},
-		&jsonflag.JSONStringFlag{
-			Name:  "name.nickname",
-			Usage: "Nickname (if different from full name)",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "name.nickname",
-			},
-		},
-		&jsonflag.JSONStringFlag{
+		&cli.StringFlag{
 			Name:  "species",
 			Usage: "The updated species of the pet",
-			Config: jsonflag.JSONConfig{
-				Kind: jsonflag.Body,
-				Path: "species",
-			},
 		},
 	},
 	Action:          handlePeoplePetsUpdate,
@@ -144,7 +99,7 @@ var peoplePetsDelete = cli.Command{
 }
 
 func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
 		cmd.Set("person-id", unusedArgs[0])
@@ -154,12 +109,17 @@ func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	params := brucetestapi.PersonPetNewParams{}
+	if err := unmarshalStdinWithFlags(cmd, map[string]string{
+		"species": "species",
+	}, &params); err != nil {
+		return err
+	}
 	var res []byte
-	_, err := cc.client.People.Pets.New(
+	_, err := client.People.Pets.New(
 		ctx,
 		cmd.Value("person-id").(string),
 		params,
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -173,7 +133,7 @@ func handlePeoplePetsCreate(ctx context.Context, cmd *cli.Command) error {
 }
 
 func handlePeoplePetsRetrieve(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
 		cmd.Set("person-id", unusedArgs[0])
@@ -182,13 +142,15 @@ func handlePeoplePetsRetrieve(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-	params := brucetestapi.PersonPetGetParams{}
+	params := brucetestapi.PersonPetGetParams{
+		PetName: cmd.Value("pet-name").(string),
+	}
 	var res []byte
-	_, err := cc.client.People.Pets.Get(
+	_, err := client.People.Pets.Get(
 		ctx,
 		cmd.Value("person-id").(string),
 		params,
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -202,7 +164,7 @@ func handlePeoplePetsRetrieve(ctx context.Context, cmd *cli.Command) error {
 }
 
 func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {
 		cmd.Set("pet-id", unusedArgs[0])
@@ -211,16 +173,23 @@ func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-	params := brucetestapi.PersonPetUpdateParams{}
+	params := brucetestapi.PersonPetUpdateParams{
+		PersonID: cmd.Value("person-id").(string),
+	}
+	if err := unmarshalStdinWithFlags(cmd, map[string]string{
+		"species": "species",
+	}, &params); err != nil {
+		return err
+	}
 	if cmd.IsSet("person-id") {
 		params.PersonID = cmd.Value("person-id").(string)
 	}
 	var res []byte
-	_, err := cc.client.People.Pets.Update(
+	_, err := client.People.Pets.Update(
 		ctx,
 		cmd.Value("pet-id").(string),
 		params,
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -234,7 +203,7 @@ func handlePeoplePetsUpdate(ctx context.Context, cmd *cli.Command) error {
 }
 
 func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("person-id") && len(unusedArgs) > 0 {
 		cmd.Set("person-id", unusedArgs[0])
@@ -244,10 +213,10 @@ func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	var res []byte
-	_, err := cc.client.People.Pets.List(
+	_, err := client.People.Pets.List(
 		ctx,
 		cmd.Value("person-id").(string),
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
@@ -261,7 +230,7 @@ func handlePeoplePetsList(ctx context.Context, cmd *cli.Command) error {
 }
 
 func handlePeoplePetsDelete(ctx context.Context, cmd *cli.Command) error {
-	cc := getAPICommandContext(cmd)
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("pet-id") && len(unusedArgs) > 0 {
 		cmd.Set("pet-id", unusedArgs[0])
@@ -270,16 +239,18 @@ func handlePeoplePetsDelete(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-	params := brucetestapi.PersonPetDeleteParams{}
+	params := brucetestapi.PersonPetDeleteParams{
+		PersonID: cmd.Value("person-id").(string),
+	}
 	if cmd.IsSet("person-id") {
 		params.PersonID = cmd.Value("person-id").(string)
 	}
 	var res []byte
-	_, err := cc.client.People.Pets.Delete(
+	_, err := client.People.Pets.Delete(
 		ctx,
 		cmd.Value("pet-id").(string),
 		params,
-		option.WithMiddleware(cc.AsMiddleware()),
+		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
 		option.WithResponseBodyInto(&res),
 	)
 	if err != nil {
