@@ -67,9 +67,9 @@ func init() {
 			},
 		},
 		Commands: []*cli.Command{
-			&clientFnord,
-			&clientPostFnord,
-			&clientTestForm,
+			&fnord,
+			&postFnord,
+			&testForm,
 			{
 				Name:     "people",
 				Category: "API RESOURCE",
