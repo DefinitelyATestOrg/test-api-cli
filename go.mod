@@ -9,7 +9,7 @@ require (
 	github.com/charmbracelet/x/term v0.2.1
 	github.com/itchyny/json2yaml v0.1.4
 	github.com/muesli/reflow v0.3.0
-	github.com/stainless-sdks/bruce-test-api-go v0.0.0-20251124190759-7e42dc34c27c
+	github.com/stainless-sdks/bruce-test-api-go v0.0.0-20251124190912-ab84fcf1ebc1
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/pretty v1.2.1
 	github.com/tidwall/sjson v1.2.5
