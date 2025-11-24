@@ -68,6 +68,13 @@ func init() {
 		},
 		Commands: []*cli.Command{
 			{
+				Name:     "foos",
+				Category: "API RESOURCE",
+				Commands: []*cli.Command{
+					&foosList,
+				},
+			},
+			{
 				Name:            "@manpages",
 				Usage:           "Generate documentation for 'man'",
 				UsageText:       "bruce-test-api @manpages [-o bruce-test-api.1] [--gzip]",
