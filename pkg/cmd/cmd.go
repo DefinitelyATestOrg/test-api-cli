@@ -67,38 +67,6 @@ func init() {
 			},
 		},
 		Commands: []*cli.Command{
-			&fnord,
-			&postFnord,
-			&testForm,
-			{
-				Name:     "people",
-				Category: "API RESOURCE",
-				Commands: []*cli.Command{
-					&peopleCreate,
-					&peopleRetrieve,
-					&peopleUpdate,
-					&peopleList,
-					&peopleDelete,
-				},
-			},
-			{
-				Name:     "people:pets",
-				Category: "API RESOURCE",
-				Commands: []*cli.Command{
-					&peoplePetsCreate,
-					&peoplePetsRetrieve,
-					&peoplePetsUpdate,
-					&peoplePetsList,
-					&peoplePetsDelete,
-				},
-			},
-			{
-				Name:     "json-test",
-				Category: "API RESOURCE",
-				Commands: []*cli.Command{
-					&jsonTestRetrieve,
-				},
-			},
 			{
 				Name:            "@manpages",
 				Usage:           "Generate documentation for 'man'",
