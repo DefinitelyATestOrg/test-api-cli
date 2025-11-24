@@ -27,24 +27,7 @@ bruce-test-api [resource] [command] [flags]
 ```
 
 ```sh
-bruce-test-api foo \
-  --version 1 \
-  --user-id abc123 \
-  --limit 20 \
-  --tag red \
-  --tag large \
-  --x-flag fast \
-  --x-flag debug \
-  --x-flag verbose \
-  --x-trace-id trace-9f82b1 \
-<<JSON
-{
-  "preferences": {
-    "theme": "dark",
-    "alerts": true
-  }
-}
-JSON
+bruce-test-api foos list
 ```
 
 For details about specific commands, use the `--help` flag.
