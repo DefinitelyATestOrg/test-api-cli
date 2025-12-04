@@ -6,6 +6,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/stainless-sdks/bruce-test-api-cli/internal/apiquery"
+	"github.com/stainless-sdks/bruce-test-api-cli/internal/requestflag"
 	"github.com/stainless-sdks/bruce-test-api-go"
 	"github.com/stainless-sdks/bruce-test-api-go/option"
 	"github.com/tidwall/gjson"
@@ -16,15 +18,21 @@ var foosList = cli.Command{
 	Name:  "list",
 	Usage: "Get foos",
 	Flags: []cli.Flag{
-		&cli.Int64Flag{
+		&requestflag.IntFlag{
 			Name:  "page",
 			Usage: "Page number",
 			Value: 1,
+			Config: requestflag.RequestConfig{
+				QueryPath: "page",
+			},
 		},
-		&cli.Int64Flag{
+		&requestflag.IntFlag{
 			Name:  "size",
 			Usage: "Page size",
 			Value: 50,
+			Config: requestflag.RequestConfig{
+				QueryPath: "size",
+			},
 		},
 	},
 	Action:          handleFoosList,
@@ -38,18 +46,22 @@ func handleFoosList(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	params := brucetestapi.FooListParams{}
-	if cmd.IsSet("page") {
-		params.Page = brucetestapi.Opt(cmd.Value("page").(int64))
-	}
-	if cmd.IsSet("size") {
-		params.Size = brucetestapi.Opt(cmd.Value("size").(int64))
+
+	options, err := flagOptions(
+		cmd,
+		apiquery.NestedQueryFormatBrackets,
+		apiquery.ArrayQueryFormatRepeat,
+		ApplicationJSON,
+	)
+	if err != nil {
+		return err
 	}
 	var res []byte
-	_, err := client.Foos.List(
+	options = append(options, option.WithResponseBodyInto(&res))
+	_, err = client.Foos.List(
 		ctx,
 		params,
-		option.WithMiddleware(debugMiddleware(cmd.Bool("debug"))),
-		option.WithResponseBodyInto(&res),
+		options...,
 	)
 	if err != nil {
 		return err
