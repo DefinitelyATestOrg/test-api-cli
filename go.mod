@@ -10,7 +10,7 @@ require (
 	github.com/goccy/go-yaml v1.18.0
 	github.com/itchyny/json2yaml v0.1.4
 	github.com/muesli/reflow v0.3.0
-	github.com/stainless-sdks/bruce-test-api-go v0.0.0-20251124190941-aee2ff12d134
+	github.com/stainless-sdks/bruce-test-api-go v0.0.0-20251205163435-007ca6757920
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/pretty v1.2.1
 	github.com/urfave/cli-docs/v3 v3.0.0-alpha6

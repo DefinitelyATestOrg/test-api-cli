@@ -27,7 +27,21 @@ bruce-test-api [resource] [command] [flags]
 ```
 
 ```sh
-bruce-test-api foos list
+bruce-test-api form-test \
+  --version 1 \
+  --user-id abc123 \
+  --date 2019-12-27 \
+  --datetime 2019-12-27T18:11:19.117Z \
+  --time 18:11:19.117Z \
+  --filter '{status: active, meta: {level: 3}}' \
+  --limit 20 \
+  --tag red \
+  --tag large \
+  --preferences '{theme: dark, alerts: true}' \
+  --x-flag fast \
+  --x-flag debug \
+  --x-flag verbose \
+  --x-trace-id trace-9f82b1
 ```
 
 For details about specific commands, use the `--help` flag.

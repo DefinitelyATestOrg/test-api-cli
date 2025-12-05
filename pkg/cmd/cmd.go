@@ -67,13 +67,9 @@ func init() {
 			},
 		},
 		Commands: []*cli.Command{
-			{
-				Name:     "foos",
-				Category: "API RESOURCE",
-				Commands: []*cli.Command{
-					&foosList,
-				},
-			},
+			&formTest,
+			&jsonTest,
+			&paginatedTest,
 			{
 				Name:            "@manpages",
 				Usage:           "Generate documentation for 'man'",
