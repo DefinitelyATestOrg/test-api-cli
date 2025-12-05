@@ -21,7 +21,7 @@ var foosList = cli.Command{
 		&requestflag.IntFlag{
 			Name:  "page",
 			Usage: "Page number",
-			Value: 1,
+			Value: requestflag.Value[int64](1),
 			Config: requestflag.RequestConfig{
 				QueryPath: "page",
 			},
@@ -29,7 +29,7 @@ var foosList = cli.Command{
 		&requestflag.IntFlag{
 			Name:  "size",
 			Usage: "Page size",
-			Value: 50,
+			Value: requestflag.Value[int64](50),
 			Config: requestflag.RequestConfig{
 				QueryPath: "size",
 			},
