@@ -5,6 +5,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/stainless-sdks/bruce-test-api-cli/internal/apiquery"
 	"github.com/stainless-sdks/bruce-test-api-cli/internal/requestflag"
@@ -218,6 +219,7 @@ func handleFormTest(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
 	return client.FormTest(
 		ctx,
 		requestflag.CommandRequestValue[string](cmd, "user-id"),
@@ -249,6 +251,7 @@ func handleJsonTest(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
 	return client.JsonTest(
 		ctx,
 		requestflag.CommandRequestValue[string](cmd, "user-id"),
@@ -260,6 +263,7 @@ func handleJsonTest(ctx context.Context, cmd *cli.Command) error {
 func handlePaginatedTest(ctx context.Context, cmd *cli.Command) error {
 	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
+
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
@@ -274,19 +278,16 @@ func handlePaginatedTest(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.PaginatedTest(
-		ctx,
-		params,
-		options...,
-	)
+	_, err = client.PaginatedTest(ctx, params, options...)
 	if err != nil {
 		return err
 	}
 
-	json := gjson.Parse(string(res))
+	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON("paginated-test", json, format, transform)
+	return ShowJSON(os.Stdout, "paginated-test", obj, format, transform)
 }
