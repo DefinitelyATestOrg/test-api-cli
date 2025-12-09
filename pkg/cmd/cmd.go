@@ -69,7 +69,8 @@ func init() {
 		Commands: []*cli.Command{
 			&formTest,
 			&jsonTest,
-			&paginatedTest,
+			&listFoos,
+			&updateCount,
 			{
 				Name:            "@manpages",
 				Usage:           "Generate documentation for 'man'",
