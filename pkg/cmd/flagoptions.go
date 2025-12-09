@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"log"
 	"mime/multipart"
 	"os"
 
 	"github.com/stainless-sdks/bruce-test-api-cli/internal/apiform"
 	"github.com/stainless-sdks/bruce-test-api-cli/internal/apiquery"
+	"github.com/stainless-sdks/bruce-test-api-cli/internal/debugmiddleware"
 	"github.com/stainless-sdks/bruce-test-api-cli/internal/requestflag"
 	"github.com/stainless-sdks/bruce-test-api-go/option"
 
@@ -30,7 +32,7 @@ func flagOptions(
 ) ([]option.RequestOption, error) {
 	var options []option.RequestOption
 	if cmd.Bool("debug") {
-		options = append(options, debugMiddlewareOption)
+		options = append(options, option.WithMiddleware(debugmiddleware.DebugMiddleware(log.Default())))
 	}
 
 	queries := make(map[string]any)
