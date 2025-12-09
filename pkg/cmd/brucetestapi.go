@@ -165,8 +165,8 @@ var jsonTest = cli.Command{
 	HideHelpCommand: true,
 }
 
-var paginatedTest = cli.Command{
-	Name:  "paginated-test",
+var listFoos = cli.Command{
+	Name:  "list-foos",
 	Usage: "Get foos",
 	Flags: []cli.Flag{
 		&requestflag.IntFlag{
@@ -192,7 +192,22 @@ var paginatedTest = cli.Command{
 			},
 		},
 	},
-	Action:          handlePaginatedTest,
+	Action:          handleListFoos,
+	HideHelpCommand: true,
+}
+
+var updateCount = cli.Command{
+	Name:  "update-count",
+	Usage: "Perform update-count operation",
+	Flags: []cli.Flag{
+		&requestflag.IntFlag{
+			Name: "body",
+			Config: requestflag.RequestConfig{
+				BodyPath: "body",
+			},
+		},
+	},
+	Action:          handleUpdateCount,
 	HideHelpCommand: true,
 }
 
@@ -260,14 +275,14 @@ func handleJsonTest(ctx context.Context, cmd *cli.Command) error {
 	)
 }
 
-func handlePaginatedTest(ctx context.Context, cmd *cli.Command) error {
+func handleListFoos(ctx context.Context, cmd *cli.Command) error {
 	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-	params := brucetestapi.PaginatedTestParams{}
+	params := brucetestapi.ListFoosParams{}
 
 	options, err := flagOptions(
 		cmd,
@@ -279,15 +294,50 @@ func handlePaginatedTest(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
-	var res []byte
-	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.PaginatedTest(ctx, params, options...)
+	format := cmd.Root().String("format")
+	transform := cmd.Root().String("transform")
+	if format == "raw" {
+		var res []byte
+		options = append(options, option.WithResponseBodyInto(&res))
+		_, err = client.ListFoos(ctx, params, options...)
+		if err != nil {
+			return err
+		}
+		obj := gjson.ParseBytes(res)
+		return ShowJSON(os.Stdout, "list-foos", obj, format, transform)
+	} else {
+		iter := client.ListFoosAutoPaging(ctx, params, options...)
+		return streamOutput("list-foos", func(w *os.File) error {
+			for iter.Next() {
+				item := iter.Current()
+				obj := gjson.Parse(item.RawJSON())
+				if err := ShowJSON(w, "list-foos", obj, format, transform); err != nil {
+					return err
+				}
+			}
+			return iter.Err()
+		})
+	}
+}
+
+func handleUpdateCount(ctx context.Context, cmd *cli.Command) error {
+	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
+	unusedArgs := cmd.Args().Slice()
+
+	if len(unusedArgs) > 0 {
+		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
+	}
+	params := brucetestapi.UpdateCountParams{}
+
+	options, err := flagOptions(
+		cmd,
+		apiquery.NestedQueryFormatDots,
+		apiquery.ArrayQueryFormatComma,
+		ApplicationJSON,
+	)
 	if err != nil {
 		return err
 	}
 
-	obj := gjson.ParseBytes(res)
-	format := cmd.Root().String("format")
-	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "paginated-test", obj, format, transform)
+	return client.UpdateCount(ctx, params, options...)
 }
