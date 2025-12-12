@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/stainless-sdks/bruce-test-api-cli/internal/apiquery"
-	"github.com/stainless-sdks/bruce-test-api-cli/internal/requestflag"
-	"github.com/stainless-sdks/bruce-test-api-go"
-	"github.com/stainless-sdks/bruce-test-api-go/option"
+	"github.com/DefinitelyATestOrg/test-api-cli/internal/apiquery"
+	"github.com/DefinitelyATestOrg/test-api-cli/internal/requestflag"
+	"github.com/DefinitelyATestOrg/test-api-go"
+	"github.com/DefinitelyATestOrg/test-api-go/option"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )

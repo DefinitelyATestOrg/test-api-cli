@@ -8,11 +8,11 @@ import (
 	"mime/multipart"
 	"os"
 
-	"github.com/stainless-sdks/bruce-test-api-cli/internal/apiform"
-	"github.com/stainless-sdks/bruce-test-api-cli/internal/apiquery"
-	"github.com/stainless-sdks/bruce-test-api-cli/internal/debugmiddleware"
-	"github.com/stainless-sdks/bruce-test-api-cli/internal/requestflag"
-	"github.com/stainless-sdks/bruce-test-api-go/option"
+	"github.com/DefinitelyATestOrg/test-api-cli/internal/apiform"
+	"github.com/DefinitelyATestOrg/test-api-cli/internal/apiquery"
+	"github.com/DefinitelyATestOrg/test-api-cli/internal/debugmiddleware"
+	"github.com/DefinitelyATestOrg/test-api-cli/internal/requestflag"
+	"github.com/DefinitelyATestOrg/test-api-go/option"
 
 	"github.com/urfave/cli/v3"
 )

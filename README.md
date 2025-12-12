@@ -8,15 +8,21 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ### Installing with Go
 
+<!-- x-release-please-start-version -->
+
 ```sh
-go install 'github.com/stainless-sdks/bruce-test-api-cli/cmd/bruce-test-api@latest'
+go install 'github.com/DefinitelyATestOrg/test-api-cli/cmd/bruce-test-api@latest'
 ```
 
 ### Running Locally
 
+<!-- x-release-please-start-version -->
+
 ```sh
 go run cmd/bruce-test-api/main.go
 ```
+
+<!-- x-release-please-end -->
 
 ## Usage
 
