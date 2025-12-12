@@ -13,8 +13,8 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/stainless-sdks/bruce-test-api-cli/pkg/jsonview"
-	"github.com/stainless-sdks/bruce-test-api-go/option"
+	"github.com/DefinitelyATestOrg/test-api-cli/pkg/jsonview"
+	"github.com/DefinitelyATestOrg/test-api-go/option"
 
 	"github.com/itchyny/json2yaml"
 	"github.com/tidwall/gjson"
