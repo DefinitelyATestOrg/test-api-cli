@@ -16,8 +16,7 @@ import (
 )
 
 var (
-	Command       *cli.Command
-	OutputFormats = []string{"auto", "explore", "json", "jsonl", "pretty", "raw", "yaml"}
+	Command *cli.Command
 )
 
 func init() {
@@ -69,8 +68,14 @@ func init() {
 		Commands: []*cli.Command{
 			&formTest,
 			&jsonTest,
-			&listFoos,
 			&updateCount,
+			{
+				Name:     "foos",
+				Category: "API RESOURCE",
+				Commands: []*cli.Command{
+					&foosList,
+				},
+			},
 			{
 				Name:            "@manpages",
 				Usage:           "Generate documentation for 'man'",

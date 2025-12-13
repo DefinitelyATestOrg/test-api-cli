@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (2025-12-09)
+## 0.3.0 (2025-12-13)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/DefinitelyATestOrg/test-api-cli/compare/v0.2.0...v0.3.0)
 
@@ -12,6 +12,8 @@ Full Changelog: [v0.2.0...v0.3.0](https://github.com/DefinitelyATestOrg/test-api
 
 * added `--output-filter` flag and `--error-format` flag to support better visualization options ([32ab7a4](https://github.com/DefinitelyATestOrg/test-api-cli/commit/32ab7a4e82db8fae569eddad16aa38c77265f18e))
 * **api:** descriptions ([2daa2f4](https://github.com/DefinitelyATestOrg/test-api-cli/commit/2daa2f47f37cfd1ac856122eb33beebbba98b08c))
+* **api:** manual updates ([f8286e8](https://github.com/DefinitelyATestOrg/test-api-cli/commit/f8286e8afb9223969c76916f17a4ba845fbb1f64))
+* **api:** manual updates ([f66e18a](https://github.com/DefinitelyATestOrg/test-api-cli/commit/f66e18ad5e8a6d8eb69fec9bac00a0730048c3ea))
 * **api:** manual updates ([7dbaa62](https://github.com/DefinitelyATestOrg/test-api-cli/commit/7dbaa622c17fed7cb2c8b569a429f5565097f25f))
 * **api:** manual updates ([63ab7ca](https://github.com/DefinitelyATestOrg/test-api-cli/commit/63ab7caeaf027991425485a3596c9c0bf3dc3951))
 * **api:** manual updates ([18a65ed](https://github.com/DefinitelyATestOrg/test-api-cli/commit/18a65ed85abd5bb00423c44f47b01bdc7b0c1dc7))
@@ -96,7 +98,9 @@ Full Changelog: [v0.2.0...v0.3.0](https://github.com/DefinitelyATestOrg/test-api
 * add scripts ([49796dc](https://github.com/DefinitelyATestOrg/test-api-cli/commit/49796dcb9435c0922a98267d37c1e0ced104bb04))
 * bump Go version ([4d55421](https://github.com/DefinitelyATestOrg/test-api-cli/commit/4d55421b1cf7e013b3a9620b6b0cd60d8a11fcaa))
 * code cleanup for `interface{}` ([014dbbc](https://github.com/DefinitelyATestOrg/test-api-cli/commit/014dbbcefaccd7539b7d82bc70e36e788d4258be))
+* configure new SDK language ([d8ea66b](https://github.com/DefinitelyATestOrg/test-api-cli/commit/d8ea66bdaf083602cbef08f849864ba2c10ab0a5))
 * do not install brew dependencies in ./scripts/bootstrap by default ([ebd69c6](https://github.com/DefinitelyATestOrg/test-api-cli/commit/ebd69c66fbd7495e48283ed3452ea130cca7a14c))
+* **internal:** codegen related update ([67bd936](https://github.com/DefinitelyATestOrg/test-api-cli/commit/67bd9362260c598879c03156b1dcbe928f5775e7))
 * **internal:** codegen related update ([38a736a](https://github.com/DefinitelyATestOrg/test-api-cli/commit/38a736ac4f5d280f051fe0d564d492ad0e4b99f3))
 * **internal:** codegen related update ([1b2453e](https://github.com/DefinitelyATestOrg/test-api-cli/commit/1b2453e1b2707a0ee38ba41801774f514f3f1e27))
 * **internal:** codegen related update ([cd3b4ce](https://github.com/DefinitelyATestOrg/test-api-cli/commit/cd3b4ce2a3dc2721ae7fc90cb246b22494429561))
@@ -112,6 +116,7 @@ Full Changelog: [v0.2.0...v0.3.0](https://github.com/DefinitelyATestOrg/test-api
 * **internal:** codegen related update ([67080b1](https://github.com/DefinitelyATestOrg/test-api-cli/commit/67080b16f4a3e1549a3c7f0ec331217e5de62de9))
 * **internal:** codegen related update ([b877c36](https://github.com/DefinitelyATestOrg/test-api-cli/commit/b877c36c703d53c6e767a8356ba915a476416812))
 * **internal:** codegen related update ([3b22666](https://github.com/DefinitelyATestOrg/test-api-cli/commit/3b2266694073136413af3e34199593e1157ae77d))
+* sync repo ([69a657b](https://github.com/DefinitelyATestOrg/test-api-cli/commit/69a657b8bcc378687cd11854c5b18357e673a685))
 * update dependencies ([ac936cc](https://github.com/DefinitelyATestOrg/test-api-cli/commit/ac936ccb7eae2cc019c530ac881c9934cd67b2a1))
 * update SDK settings ([732de15](https://github.com/DefinitelyATestOrg/test-api-cli/commit/732de1511433ac3e392e3410b3b860c81637a100))
 * update SDK settings ([c5e81f7](https://github.com/DefinitelyATestOrg/test-api-cli/commit/c5e81f7c0de22aff61def5d4a998a7e45f1c931a))
