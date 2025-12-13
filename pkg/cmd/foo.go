@@ -19,27 +19,21 @@ var foosList = cli.Command{
 	Name:  "list",
 	Usage: "Get foos",
 	Flags: []cli.Flag{
-		&requestflag.IntFlag{
-			Name:  "page",
-			Usage: "Page number",
-			Value: requestflag.Value[int64](1),
-			Config: requestflag.RequestConfig{
-				QueryPath: "page",
-			},
+		&requestflag.Flag[int64]{
+			Name:      "page",
+			Usage:     "Page number",
+			Default:   1,
+			QueryPath: "page",
 		},
-		&requestflag.IntFlag{
-			Name:  "size",
-			Usage: "Page size",
-			Value: requestflag.Value[int64](50),
-			Config: requestflag.RequestConfig{
-				QueryPath: "size",
-			},
+		&requestflag.Flag[int64]{
+			Name:      "size",
+			Usage:     "Page size",
+			Default:   50,
+			QueryPath: "size",
 		},
-		&requestflag.StringSliceFlag{
-			Name: "tag",
-			Config: requestflag.RequestConfig{
-				QueryPath: "tags",
-			},
+		&requestflag.Flag[[]string]{
+			Name:      "tag",
+			QueryPath: "tags",
 		},
 	},
 	Action:          handleFoosList,

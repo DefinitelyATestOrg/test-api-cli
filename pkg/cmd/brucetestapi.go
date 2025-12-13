@@ -16,71 +16,51 @@ var formTest = cli.Command{
 	Name:  "form-test",
 	Usage: "Mixed parameter types",
 	Flags: []cli.Flag{
-		&requestflag.IntFlag{
+		&requestflag.Flag[int64]{
 			Name: "version",
 		},
-		&requestflag.StringFlag{
+		&requestflag.Flag[string]{
 			Name: "user-id",
 		},
-		&requestflag.DateFlag{
-			Name: "date",
-			Config: requestflag.RequestConfig{
-				QueryPath: "date",
-			},
+		&requestflag.Flag[requestflag.DateValue]{
+			Name:      "date",
+			QueryPath: "date",
 		},
-		&requestflag.DateTimeFlag{
-			Name: "datetime",
-			Config: requestflag.RequestConfig{
-				QueryPath: "datetime",
-			},
+		&requestflag.Flag[requestflag.DateTimeValue]{
+			Name:      "datetime",
+			QueryPath: "datetime",
 		},
-		&requestflag.TimeFlag{
-			Name: "time",
-			Config: requestflag.RequestConfig{
-				QueryPath: "time",
-			},
+		&requestflag.Flag[requestflag.TimeValue]{
+			Name:      "time",
+			QueryPath: "time",
 		},
-		&requestflag.YAMLFlag{
-			Name: "filter",
-			Config: requestflag.RequestConfig{
-				QueryPath: "filter",
-			},
+		&requestflag.Flag[any]{
+			Name:      "filter",
+			QueryPath: "filter",
 		},
-		&requestflag.IntFlag{
-			Name: "limit",
-			Config: requestflag.RequestConfig{
-				QueryPath: "limit",
-			},
+		&requestflag.Flag[int64]{
+			Name:      "limit",
+			QueryPath: "limit",
 		},
-		&requestflag.StringSliceFlag{
-			Name: "tag",
-			Config: requestflag.RequestConfig{
-				QueryPath: "tags",
-			},
+		&requestflag.Flag[[]string]{
+			Name:      "tag",
+			QueryPath: "tags",
 		},
-		&requestflag.StringFlag{
-			Name: "blorp",
-			Config: requestflag.RequestConfig{
-				BodyPath: "blorp",
-			},
+		&requestflag.Flag[string]{
+			Name:     "blorp",
+			BodyPath: "blorp",
 		},
-		&requestflag.YAMLFlag{
-			Name: "preferences",
-			Config: requestflag.RequestConfig{
-				BodyPath: "preferences",
-			},
+		&requestflag.Flag[any]{
+			Name:     "preferences",
+			BodyPath: "preferences",
 		},
-		&requestflag.StringSliceFlag{
-			Name: "x-flag",
-			Config: requestflag.RequestConfig{
-				HeaderPath: "X-Flags",
-			},
+		&requestflag.Flag[[]string]{
+			Name:       "x-flag",
+			HeaderPath: "X-Flags",
 		},
-		&requestflag.StringFlag{
-			Name: "x-trace-id",
-			Config: requestflag.RequestConfig{
-				HeaderPath: "X-Trace-ID",
-			},
+		&requestflag.Flag[string]{
+			Name:       "x-trace-id",
+			HeaderPath: "X-Trace-ID",
 		},
 	},
 	Action:          handleFormTest,
@@ -91,71 +71,51 @@ var jsonTest = cli.Command{
 	Name:  "json-test",
 	Usage: "Mixed parameter types",
 	Flags: []cli.Flag{
-		&requestflag.IntFlag{
+		&requestflag.Flag[int64]{
 			Name: "version",
 		},
-		&requestflag.StringFlag{
+		&requestflag.Flag[string]{
 			Name: "user-id",
 		},
-		&requestflag.DateFlag{
-			Name: "date",
-			Config: requestflag.RequestConfig{
-				QueryPath: "date",
-			},
+		&requestflag.Flag[requestflag.DateValue]{
+			Name:      "date",
+			QueryPath: "date",
 		},
-		&requestflag.DateTimeFlag{
-			Name: "datetime",
-			Config: requestflag.RequestConfig{
-				QueryPath: "datetime",
-			},
+		&requestflag.Flag[requestflag.DateTimeValue]{
+			Name:      "datetime",
+			QueryPath: "datetime",
 		},
-		&requestflag.TimeFlag{
-			Name: "time",
-			Config: requestflag.RequestConfig{
-				QueryPath: "time",
-			},
+		&requestflag.Flag[requestflag.TimeValue]{
+			Name:      "time",
+			QueryPath: "time",
 		},
-		&requestflag.YAMLFlag{
-			Name: "filter",
-			Config: requestflag.RequestConfig{
-				QueryPath: "filter",
-			},
+		&requestflag.Flag[any]{
+			Name:      "filter",
+			QueryPath: "filter",
 		},
-		&requestflag.IntFlag{
-			Name: "limit",
-			Config: requestflag.RequestConfig{
-				QueryPath: "limit",
-			},
+		&requestflag.Flag[int64]{
+			Name:      "limit",
+			QueryPath: "limit",
 		},
-		&requestflag.StringSliceFlag{
-			Name: "tag",
-			Config: requestflag.RequestConfig{
-				QueryPath: "tags",
-			},
+		&requestflag.Flag[[]string]{
+			Name:      "tag",
+			QueryPath: "tags",
 		},
-		&requestflag.StringFlag{
-			Name: "blorp",
-			Config: requestflag.RequestConfig{
-				BodyPath: "blorp",
-			},
+		&requestflag.Flag[string]{
+			Name:     "blorp",
+			BodyPath: "blorp",
 		},
-		&requestflag.YAMLFlag{
-			Name: "preferences",
-			Config: requestflag.RequestConfig{
-				BodyPath: "preferences",
-			},
+		&requestflag.Flag[any]{
+			Name:     "preferences",
+			BodyPath: "preferences",
 		},
-		&requestflag.StringSliceFlag{
-			Name: "x-flag",
-			Config: requestflag.RequestConfig{
-				HeaderPath: "X-Flags",
-			},
+		&requestflag.Flag[[]string]{
+			Name:       "x-flag",
+			HeaderPath: "X-Flags",
 		},
-		&requestflag.StringFlag{
-			Name: "x-trace-id",
-			Config: requestflag.RequestConfig{
-				HeaderPath: "X-Trace-ID",
-			},
+		&requestflag.Flag[string]{
+			Name:       "x-trace-id",
+			HeaderPath: "X-Trace-ID",
 		},
 	},
 	Action:          handleJsonTest,
@@ -166,11 +126,9 @@ var updateCount = cli.Command{
 	Name:  "update-count",
 	Usage: "Perform update-count operation",
 	Flags: []cli.Flag{
-		&requestflag.IntFlag{
-			Name: "body",
-			Config: requestflag.RequestConfig{
-				BodyPath: "body",
-			},
+		&requestflag.Flag[int64]{
+			Name:     "body",
+			BodyRoot: true,
 		},
 	},
 	Action:          handleUpdateCount,
@@ -188,7 +146,7 @@ func handleFormTest(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	params := brucetestapi.FormTestParams{
-		Version: requestflag.CommandRequestValue[int64](cmd, "version"),
+		Version: cmd.Value("version").(int64),
 	}
 
 	options, err := flagOptions(
@@ -203,7 +161,7 @@ func handleFormTest(ctx context.Context, cmd *cli.Command) error {
 
 	return client.FormTest(
 		ctx,
-		requestflag.CommandRequestValue[string](cmd, "user-id"),
+		cmd.Value("user-id").(string),
 		params,
 		options...,
 	)
@@ -220,7 +178,7 @@ func handleJsonTest(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 	params := brucetestapi.JsonTestParams{
-		Version: requestflag.CommandRequestValue[int64](cmd, "version"),
+		Version: cmd.Value("version").(int64),
 	}
 
 	options, err := flagOptions(
@@ -235,7 +193,7 @@ func handleJsonTest(ctx context.Context, cmd *cli.Command) error {
 
 	return client.JsonTest(
 		ctx,
-		requestflag.CommandRequestValue[string](cmd, "user-id"),
+		cmd.Value("user-id").(string),
 		params,
 		options...,
 	)
