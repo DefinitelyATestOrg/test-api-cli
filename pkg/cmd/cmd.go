@@ -70,10 +70,17 @@ func init() {
 			&jsonTest,
 			&updateCount,
 			{
-				Name:     "foos",
+				Name:     "pagination",
 				Category: "API RESOURCE",
 				Commands: []*cli.Command{
-					&foosList,
+					&paginationList,
+				},
+			},
+			{
+				Name:     "pagination:ints",
+				Category: "API RESOURCE",
+				Commands: []*cli.Command{
+					&paginationIntsList,
 				},
 			},
 			{

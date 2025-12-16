@@ -15,7 +15,7 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var foosList = cli.Command{
+var paginationList = cli.Command{
 	Name:  "list",
 	Usage: "Get foos",
 	Flags: []cli.Flag{
@@ -36,18 +36,18 @@ var foosList = cli.Command{
 			QueryPath: "tags",
 		},
 	},
-	Action:          handleFoosList,
+	Action:          handlePaginationList,
 	HideHelpCommand: true,
 }
 
-func handleFoosList(ctx context.Context, cmd *cli.Command) error {
+func handlePaginationList(ctx context.Context, cmd *cli.Command) error {
 	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-	params := brucetestapi.FooListParams{}
+	params := brucetestapi.PaginationListParams{}
 
 	options, err := flagOptions(
 		cmd,
@@ -64,19 +64,19 @@ func handleFoosList(ctx context.Context, cmd *cli.Command) error {
 	if format == "raw" {
 		var res []byte
 		options = append(options, option.WithResponseBodyInto(&res))
-		_, err = client.Foos.List(ctx, params, options...)
+		_, err = client.Pagination.List(ctx, params, options...)
 		if err != nil {
 			return err
 		}
 		obj := gjson.ParseBytes(res)
-		return ShowJSON(os.Stdout, "foos list", obj, format, transform)
+		return ShowJSON(os.Stdout, "pagination list", obj, format, transform)
 	} else {
-		iter := client.Foos.ListAutoPaging(ctx, params, options...)
-		return streamOutput("foos list", func(w *os.File) error {
+		iter := client.Pagination.ListAutoPaging(ctx, params, options...)
+		return streamOutput("pagination list", func(w *os.File) error {
 			for iter.Next() {
 				item := iter.Current()
 				obj := gjson.Parse(item.RawJSON())
-				if err := ShowJSON(w, "foos list", obj, format, transform); err != nil {
+				if err := ShowJSON(w, "pagination list", obj, format, transform); err != nil {
 					return err
 				}
 			}
