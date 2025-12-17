@@ -41,6 +41,7 @@ func handlePaginationIntsList(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
+
 	params := brucetestapi.PaginationIntListParams{}
 
 	options, err := flagOptions(
@@ -48,6 +49,7 @@ func handlePaginationIntsList(ctx context.Context, cmd *cli.Command) error {
 		apiquery.NestedQueryFormatDots,
 		apiquery.ArrayQueryFormatComma,
 		EmptyBody,
+		false,
 	)
 	if err != nil {
 		return err
