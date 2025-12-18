@@ -4,6 +4,7 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -71,7 +72,11 @@ func handlePaginationIntsList(ctx context.Context, cmd *cli.Command) error {
 		return streamOutput("pagination:ints list", func(w *os.File) error {
 			for iter.Next() {
 				item := iter.Current()
-				obj := gjson.Parse(item.RawJSON())
+				jsonObj, err := json.Marshal(item)
+				if err != nil {
+					return err
+				}
+				obj := gjson.ParseBytes(jsonObj)
 				if err := ShowJSON(w, "pagination:ints list", obj, format, transform); err != nil {
 					return err
 				}
