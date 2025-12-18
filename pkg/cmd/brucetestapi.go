@@ -51,6 +51,10 @@ var formTest = cli.Command{
 			BodyPath: "blorp",
 		},
 		&requestflag.Flag[any]{
+			Name:     "pls-null",
+			BodyPath: "pls_null",
+		},
+		&requestflag.Flag[any]{
 			Name:     "preferences",
 			BodyPath: "preferences",
 		},
@@ -104,6 +108,10 @@ var jsonTest = cli.Command{
 		&requestflag.Flag[string]{
 			Name:     "blorp",
 			BodyPath: "blorp",
+		},
+		&requestflag.Flag[any]{
+			Name:     "pls-null",
+			BodyPath: "pls_null",
 		},
 		&requestflag.Flag[any]{
 			Name:     "preferences",
