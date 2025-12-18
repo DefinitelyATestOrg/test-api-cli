@@ -12,7 +12,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/DefinitelyATestOrg/test-api-cli/pkg/jsonview"
+	"github.com/DefinitelyATestOrg/test-api-cli/internal/jsonview"
 	"github.com/DefinitelyATestOrg/test-api-go/option"
 
 	"github.com/itchyny/json2yaml"
