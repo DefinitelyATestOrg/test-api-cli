@@ -38,6 +38,10 @@ var formTest = cli.Command{
 			Name:      "filter",
 			QueryPath: "filter",
 		},
+		&requestflag.Flag[any]{
+			Name:      "id-or-index",
+			QueryPath: "idOrIndex",
+		},
 		&requestflag.Flag[int64]{
 			Name:      "limit",
 			QueryPath: "limit",
@@ -96,6 +100,10 @@ var jsonTest = cli.Command{
 		&requestflag.Flag[any]{
 			Name:      "filter",
 			QueryPath: "filter",
+		},
+		&requestflag.Flag[any]{
+			Name:      "id-or-index",
+			QueryPath: "idOrIndex",
 		},
 		&requestflag.Flag[int64]{
 			Name:      "limit",
