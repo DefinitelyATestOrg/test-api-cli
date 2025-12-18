@@ -5,10 +5,8 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/DefinitelyATestOrg/test-api-cli/internal/apiquery"
-	"github.com/DefinitelyATestOrg/test-api-cli/internal/binaryparam"
 	"github.com/DefinitelyATestOrg/test-api-cli/internal/requestflag"
 	"github.com/DefinitelyATestOrg/test-api-go"
 	"github.com/urfave/cli/v3"
@@ -213,12 +211,6 @@ func handleUpdateCount(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	bodyReader, stdinInUse, err := binaryparam.FileOrStdin(os.Stdin, cmd.Value("body").(int64))
-	if err != nil {
-		return fmt.Errorf("Failed on param '%s': %w", "body", err)
-	}
-	defer bodyReader.Close()
-
 	params := brucetestapi.UpdateCountParams{}
 
 	options, err := flagOptions(
@@ -226,7 +218,7 @@ func handleUpdateCount(ctx context.Context, cmd *cli.Command) error {
 		apiquery.NestedQueryFormatDots,
 		apiquery.ArrayQueryFormatComma,
 		ApplicationJSON,
-		stdinInUse,
+		false,
 	)
 	if err != nil {
 		return err
