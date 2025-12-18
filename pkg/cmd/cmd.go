@@ -85,6 +85,13 @@ func init() {
 				},
 			},
 			{
+				Name:     "stream-json",
+				Category: "API RESOURCE",
+				Commands: []*cli.Command{
+					&streamJsonStream,
+				},
+			},
+			{
 				Name:            "@manpages",
 				Usage:           "Generate documentation for 'man'",
 				UsageText:       "bruce-test-api @manpages [-o bruce-test-api.1] [--gzip]",
