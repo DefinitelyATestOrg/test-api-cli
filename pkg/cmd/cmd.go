@@ -92,13 +92,6 @@ func init() {
 				},
 			},
 			{
-				Name:     "linked-list",
-				Category: "API RESOURCE",
-				Commands: []*cli.Command{
-					&linkedListCreate,
-				},
-			},
-			{
 				Name:            "@manpages",
 				Usage:           "Generate documentation for 'man'",
 				UsageText:       "bruce-test-api @manpages [-o bruce-test-api.1] [--gzip]",
