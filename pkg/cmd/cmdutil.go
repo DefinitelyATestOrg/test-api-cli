@@ -9,20 +9,20 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
-	"runtime"
 	"strings"
 	"syscall"
 
-	"github.com/stainless-sdks/bruce-test-api-cli/pkg/jsonview"
-	"github.com/stainless-sdks/bruce-test-api-go/option"
+	"github.com/DefinitelyATestOrg/test-api-cli/internal/jsonview"
+	"github.com/DefinitelyATestOrg/test-api-go/option"
 
 	"github.com/itchyny/json2yaml"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/pretty"
 	"github.com/urfave/cli/v3"
-	"golang.org/x/sys/unix"
 	"golang.org/x/term"
 )
+
+var OutputFormats = []string{"auto", "explore", "json", "jsonl", "pretty", "raw", "yaml"}
 
 func getDefaultRequestOptions(cmd *cli.Command) []option.RequestOption {
 	opts := []option.RequestOption{
@@ -82,28 +82,62 @@ func streamOutput(label string, generateOutput func(w *os.File) error) error {
 		return streamToStdout(generateOutput)
 	}
 
-	pagerInput, outputFile, isSocketPair, err := createPagerFiles()
+	// When streaming output on Unix-like systems, there's a special trick involving creating two socket pairs
+	// that we prefer because it supports small buffer sizes which results in less pagination per buffer. The
+	// constructs needed to run it don't exist on Windows builds, so we have this function broken up into
+	// OS-specific files with conditional build comments. Under Windows (and in case our fancy constructs fail
+	// on Unix), we fall back to using pipes (`streamToPagerWithPipe`), which are OS agnostic.
+	//
+	// Defined in either cmdutil_unix.go or cmdutil_windows.go.
+	return streamOutputOSSpecific(label, generateOutput)
+}
+
+func streamToPagerWithPipe(label string, generateOutput func(w *os.File) error) error {
+	r, w, err := os.Pipe()
 	if err != nil {
 		return err
 	}
-	defer pagerInput.Close()
-	defer outputFile.Close()
+	defer r.Close()
+	defer w.Close()
 
-	cmd, err := startPagerCommand(pagerInput, label, isSocketPair)
-	if err != nil {
+	pagerProgram := os.Getenv("PAGER")
+	if pagerProgram == "" {
+		pagerProgram = "less"
+	}
+
+	if _, err := exec.LookPath(pagerProgram); err != nil {
 		return err
 	}
 
-	if err := pagerInput.Close(); err != nil {
+	cmd := exec.Command(pagerProgram)
+	cmd.Stdin = r
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = append(os.Environ(),
+		"LESS=-r -P "+label,
+		"MORE=-r -P "+label,
+	)
+
+	if err := cmd.Start(); err != nil {
 		return err
 	}
 
-	// If the pager exits before reading all input, then generateOutput() will
-	// produce a broken pipe error, which is fine and we don't want to propagate it.
-	if err := generateOutput(outputFile); err != nil && !strings.Contains(err.Error(), "broken pipe") {
+	if err := r.Close(); err != nil {
 		return err
 	}
 
+	// If we would be streaming to a terminal and aren't forcing color one way
+	// or the other, we should configure things to use color so the pager gets
+	// colorized input.
+	if isTerminal(os.Stdout) && os.Getenv("FORCE_COLOR") == "" {
+		os.Setenv("FORCE_COLOR", "1")
+	}
+
+	if err := generateOutput(w); err != nil && !strings.Contains(err.Error(), "broken pipe") {
+		return err
+	}
+
+	w.Close()
 	return cmd.Wait()
 }
 
@@ -114,81 +148,6 @@ func streamToStdout(generateOutput func(w *os.File) error) error {
 		return nil
 	}
 	return err
-}
-
-func createPagerFiles() (*os.File, *os.File, bool, error) {
-	// Windows lacks UNIX socket APIs, so we fall back to pipes there or if
-	// socket creation fails. We prefer sockets when available because they
-	// allow for smaller buffer sizes, preventing unnecessary data streaming
-	// from the backend. Pipes typically have large buffers but serve as a
-	// decent alternative when sockets aren't available.
-	if runtime.GOOS != "windows" {
-		pagerInput, outputFile, isSocketPair, err := createSocketPair()
-		if err == nil {
-			return pagerInput, outputFile, isSocketPair, nil
-		}
-	}
-
-	r, w, err := os.Pipe()
-	return r, w, false, err
-}
-
-// In order to avoid large buffers on pipes, this function create a pair of
-// files for reading and writing through a barely buffered socket.
-func createSocketPair() (*os.File, *os.File, bool, error) {
-	fds, err := unix.Socketpair(unix.AF_UNIX, unix.SOCK_STREAM, 0)
-	if err != nil {
-		return nil, nil, false, err
-	}
-
-	parentSock, childSock := fds[0], fds[1]
-
-	// Use small buffer sizes so we don't ask the server for more paginated
-	// values than we actually need.
-	if err := unix.SetsockoptInt(parentSock, unix.SOL_SOCKET, unix.SO_SNDBUF, 128); err != nil {
-		return nil, nil, false, err
-	}
-	if err := unix.SetsockoptInt(childSock, unix.SOL_SOCKET, unix.SO_RCVBUF, 128); err != nil {
-		return nil, nil, false, err
-	}
-
-	pagerInput := os.NewFile(uintptr(childSock), "child_socket")
-	outputFile := os.NewFile(uintptr(parentSock), "parent_socket")
-	return pagerInput, outputFile, true, nil
-}
-
-// Start a subprocess running the user's preferred pager (or `less` if `$PAGER` is unset)
-func startPagerCommand(pagerInput *os.File, label string, useSocketpair bool) (*exec.Cmd, error) {
-	pagerProgram := os.Getenv("PAGER")
-	if pagerProgram == "" {
-		pagerProgram = "less"
-	}
-
-	if shouldUseColors(os.Stdout) {
-		os.Setenv("FORCE_COLOR", "1")
-	}
-
-	var cmd *exec.Cmd
-	if useSocketpair {
-		cmd = exec.Command(pagerProgram, fmt.Sprintf("/dev/fd/%d", pagerInput.Fd()))
-		cmd.ExtraFiles = []*os.File{pagerInput}
-	} else {
-		cmd = exec.Command(pagerProgram)
-		cmd.Stdin = pagerInput
-	}
-
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Env = append(os.Environ(),
-		"LESS=-r -f -P "+label,
-		"MORE=-r -f -P "+label,
-	)
-
-	if err := cmd.Start(); err != nil {
-		return nil, err
-	}
-
-	return cmd, nil
 }
 
 func shouldUseColors(w io.Writer) bool {

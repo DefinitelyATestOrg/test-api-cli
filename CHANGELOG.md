@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (2025-12-09)
+## 0.3.0 (2025-12-19)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/DefinitelyATestOrg/test-api-cli/compare/v0.2.0...v0.3.0)
 
@@ -10,8 +10,16 @@ Full Changelog: [v0.2.0...v0.3.0](https://github.com/DefinitelyATestOrg/test-api
 
 ### Features
 
+* add better suggests when commands don't match ([f94ae2d](https://github.com/DefinitelyATestOrg/test-api-cli/commit/f94ae2d7a4f0957e0fa14ddca494668f0c0eb18c))
 * added `--output-filter` flag and `--error-format` flag to support better visualization options ([32ab7a4](https://github.com/DefinitelyATestOrg/test-api-cli/commit/32ab7a4e82db8fae569eddad16aa38c77265f18e))
+* added mock server tests ([7c27f5c](https://github.com/DefinitelyATestOrg/test-api-cli/commit/7c27f5c114d26658a7dbf0e4d8e90928ff375157))
 * **api:** descriptions ([2daa2f4](https://github.com/DefinitelyATestOrg/test-api-cli/commit/2daa2f47f37cfd1ac856122eb33beebbba98b08c))
+* **api:** manual updates ([8ad904f](https://github.com/DefinitelyATestOrg/test-api-cli/commit/8ad904fbbfdc63194208d7b46ab80135efd81275))
+* **api:** manual updates ([ad89442](https://github.com/DefinitelyATestOrg/test-api-cli/commit/ad8944266e335b4f25faabc77a358a744db8563e))
+* **api:** manual updates ([8079ca7](https://github.com/DefinitelyATestOrg/test-api-cli/commit/8079ca7a8ebaf99984712f6130df25e921cd29c2))
+* **api:** manual updates ([d142428](https://github.com/DefinitelyATestOrg/test-api-cli/commit/d142428b58bb52f8579cef126309c3b413cd7897))
+* **api:** manual updates ([9814cfb](https://github.com/DefinitelyATestOrg/test-api-cli/commit/9814cfb77ec3efff7cd7fb0a61782e42d6b2db6a))
+* **api:** manual updates ([c83b5ff](https://github.com/DefinitelyATestOrg/test-api-cli/commit/c83b5ff22751417c77c303afc0ac68a85eb0d123))
 * **api:** manual updates ([7dbaa62](https://github.com/DefinitelyATestOrg/test-api-cli/commit/7dbaa622c17fed7cb2c8b569a429f5565097f25f))
 * **api:** manual updates ([63ab7ca](https://github.com/DefinitelyATestOrg/test-api-cli/commit/63ab7caeaf027991425485a3596c9c0bf3dc3951))
 * **api:** manual updates ([18a65ed](https://github.com/DefinitelyATestOrg/test-api-cli/commit/18a65ed85abd5bb00423c44f47b01bdc7b0c1dc7))
@@ -70,9 +78,12 @@ Full Changelog: [v0.2.0...v0.3.0](https://github.com/DefinitelyATestOrg/test-api
 * **api:** manual updates ([e106a93](https://github.com/DefinitelyATestOrg/test-api-cli/commit/e106a93399a60fdfc2f698cc57c7823155525623))
 * **api:** manual updates ([cd7c10d](https://github.com/DefinitelyATestOrg/test-api-cli/commit/cd7c10da090f407f95aa7fd0bd39f22b704c6850))
 * **api:** people/pets ([e97eb9b](https://github.com/DefinitelyATestOrg/test-api-cli/commit/e97eb9b58175ad6fa67f9fa7e546efb40d723e4a))
+* **api:** update via SDK Studio ([3a90c98](https://github.com/DefinitelyATestOrg/test-api-cli/commit/3a90c98e80a5fa2995e55cb7f0d917152e6d3be4))
 * arguments now have defaults and descriptions ([51cbf84](https://github.com/DefinitelyATestOrg/test-api-cli/commit/51cbf84dc55952f9276a8161071d2133a0ed108a))
 * better support for positional arguments ([bc6bc26](https://github.com/DefinitelyATestOrg/test-api-cli/commit/bc6bc26bdce881cfd6da2519e61c391e63944af7))
 * **cli:** automatic streaming for paginated endpoints ([d375e1a](https://github.com/DefinitelyATestOrg/test-api-cli/commit/d375e1a93536ebe35473548eb32dd1a52ded1949))
+* **cli:** binary request bodies ([4e202f2](https://github.com/DefinitelyATestOrg/test-api-cli/commit/4e202f228415e708720bb11169eb1c1a8eb8163e))
+* enable support for streaming endpoints ([222acbd](https://github.com/DefinitelyATestOrg/test-api-cli/commit/222acbd2922f7302d258e9367c2301b7a342b856))
 * fix edge cases for sending request data and add YAML support ([8f11920](https://github.com/DefinitelyATestOrg/test-api-cli/commit/8f11920b8821ce540d71ec4e8057ec7890aeffa6))
 * new logic for parsing arguments ([ede380d](https://github.com/DefinitelyATestOrg/test-api-cli/commit/ede380db4d7307cc17dbbd16afcb8a1e360ac07a))
 * now ships with manpages ([c8c3c6d](https://github.com/DefinitelyATestOrg/test-api-cli/commit/c8c3c6d34b6e73ac296e8c6610219f57e6436ed8))
@@ -81,11 +92,18 @@ Full Changelog: [v0.2.0...v0.3.0](https://github.com/DefinitelyATestOrg/test-api
 
 ### Bug Fixes
 
+* **cli:** fix compilation on Windows ([57f4f5c](https://github.com/DefinitelyATestOrg/test-api-cli/commit/57f4f5c6a442affeb8883f0d7336926e64391b80))
+* **cli:** remove `*.exe` files from customer SDK changes ([4114fd1](https://github.com/DefinitelyATestOrg/test-api-cli/commit/4114fd181010f9c1d787aee7b45bff47b834ff5e))
+* **cli:** when encoutering scalar body root parameter, don't treat it as binary ([e7e3d4d](https://github.com/DefinitelyATestOrg/test-api-cli/commit/e7e3d4d82093cc847d2466000d4064e6048fa1c1))
 * downgrade urfave/cli-docs dependency ([9249509](https://github.com/DefinitelyATestOrg/test-api-cli/commit/9249509aec379962c443e39b3e2065dc0a95e0bf))
 * fix builds for non-public Go repos ([a53744a](https://github.com/DefinitelyATestOrg/test-api-cli/commit/a53744a483285ba994b180cc610c46ae1178cdba))
 * fix for default flag values ([5f8a7a4](https://github.com/DefinitelyATestOrg/test-api-cli/commit/5f8a7a452a5fb1fdf7ebdcbfb64320ceb627dbe8))
+* fix for empty request bodies ([a44a85f](https://github.com/DefinitelyATestOrg/test-api-cli/commit/a44a85fe1a3ce7def843bc723161ffa54a030423))
 * fix for issue with nil responses ([3a024dc](https://github.com/DefinitelyATestOrg/test-api-cli/commit/3a024dcedc9b5edd034ed050cd4100a604aaa542))
+* fix paginated endpoints for primitive types ([364f834](https://github.com/DefinitelyATestOrg/test-api-cli/commit/364f8345faa38b4da483e4d70163cc1dfebb0a5a))
+* fixed manpage generation ([c418944](https://github.com/DefinitelyATestOrg/test-api-cli/commit/c4189441f8ae17e2d1a280340fa0f01f61c05740))
 * **homebrew:** homebrew distribution should work now ([8990114](https://github.com/DefinitelyATestOrg/test-api-cli/commit/89901145d94e59d459d86a9aab24b8cecbcb732e))
+* ignore .exe files ([1013117](https://github.com/DefinitelyATestOrg/test-api-cli/commit/10131173967d50935036cb431981a185381016b2))
 * **mcp:** correct code tool API endpoint ([21d877c](https://github.com/DefinitelyATestOrg/test-api-cli/commit/21d877c5e108fb126b2781483ba4bcc5e0c69525))
 * pass through context parameter correctly ([7ba493e](https://github.com/DefinitelyATestOrg/test-api-cli/commit/7ba493e5c3bd9d365c1e480027446c7c8f15bdc0))
 * remove some bootstrapping logic ([5eadc69](https://github.com/DefinitelyATestOrg/test-api-cli/commit/5eadc6965ff89a7c69d095e56762d8271755c3bb))
@@ -95,8 +113,18 @@ Full Changelog: [v0.2.0...v0.3.0](https://github.com/DefinitelyATestOrg/test-api
 
 * add scripts ([49796dc](https://github.com/DefinitelyATestOrg/test-api-cli/commit/49796dcb9435c0922a98267d37c1e0ced104bb04))
 * bump Go version ([4d55421](https://github.com/DefinitelyATestOrg/test-api-cli/commit/4d55421b1cf7e013b3a9620b6b0cd60d8a11fcaa))
+* **cli:** add `*.exe` files back to `.gitignore` ([163924e](https://github.com/DefinitelyATestOrg/test-api-cli/commit/163924e8fcca68d84026a03b59f129e6b672da7a))
+* **cli:** move `jsonview` subpackage to `internal` ([e5d6179](https://github.com/DefinitelyATestOrg/test-api-cli/commit/e5d6179cd2dd3b691e0362ab7de70c395cabd338))
+* **cli:** run pre-codegen tests on Windows ([8b9a336](https://github.com/DefinitelyATestOrg/test-api-cli/commit/8b9a33619e37a07e5f7fee72e80b5220c1895774))
+* **cli:** temporarily remove `*.exe` from `.gitignore` ([1a30213](https://github.com/DefinitelyATestOrg/test-api-cli/commit/1a30213581efb9375e8462dae981b68229590d5a))
 * code cleanup for `interface{}` ([014dbbc](https://github.com/DefinitelyATestOrg/test-api-cli/commit/014dbbcefaccd7539b7d82bc70e36e788d4258be))
+* configure new SDK language ([e17255d](https://github.com/DefinitelyATestOrg/test-api-cli/commit/e17255d985ff5a3028c3bd26d28973e24cbed24d))
 * do not install brew dependencies in ./scripts/bootstrap by default ([ebd69c6](https://github.com/DefinitelyATestOrg/test-api-cli/commit/ebd69c66fbd7495e48283ed3452ea130cca7a14c))
+* **internal:** codegen related update ([e784840](https://github.com/DefinitelyATestOrg/test-api-cli/commit/e7848409e06598d52800d5425471f4acc354619a))
+* **internal:** codegen related update ([c4594ab](https://github.com/DefinitelyATestOrg/test-api-cli/commit/c4594ab6ae3aca74e50289a23f481359c17fdf72))
+* **internal:** codegen related update ([3ba560a](https://github.com/DefinitelyATestOrg/test-api-cli/commit/3ba560a22464571ae72dad5fd380a1b7baab46ae))
+* **internal:** codegen related update ([cbd3dfc](https://github.com/DefinitelyATestOrg/test-api-cli/commit/cbd3dfc970d6deee341ccd98e020d991419a5c5d))
+* **internal:** codegen related update ([364a22b](https://github.com/DefinitelyATestOrg/test-api-cli/commit/364a22bae549f6134e8131c78aaf826cf8888147))
 * **internal:** codegen related update ([38a736a](https://github.com/DefinitelyATestOrg/test-api-cli/commit/38a736ac4f5d280f051fe0d564d492ad0e4b99f3))
 * **internal:** codegen related update ([1b2453e](https://github.com/DefinitelyATestOrg/test-api-cli/commit/1b2453e1b2707a0ee38ba41801774f514f3f1e27))
 * **internal:** codegen related update ([cd3b4ce](https://github.com/DefinitelyATestOrg/test-api-cli/commit/cd3b4ce2a3dc2721ae7fc90cb246b22494429561))
@@ -112,9 +140,11 @@ Full Changelog: [v0.2.0...v0.3.0](https://github.com/DefinitelyATestOrg/test-api
 * **internal:** codegen related update ([67080b1](https://github.com/DefinitelyATestOrg/test-api-cli/commit/67080b16f4a3e1549a3c7f0ec331217e5de62de9))
 * **internal:** codegen related update ([b877c36](https://github.com/DefinitelyATestOrg/test-api-cli/commit/b877c36c703d53c6e767a8356ba915a476416812))
 * **internal:** codegen related update ([3b22666](https://github.com/DefinitelyATestOrg/test-api-cli/commit/3b2266694073136413af3e34199593e1157ae77d))
+* sync repo ([87203a6](https://github.com/DefinitelyATestOrg/test-api-cli/commit/87203a61732599b9ab33a5f214fe24cecc40e588))
 * update dependencies ([ac936cc](https://github.com/DefinitelyATestOrg/test-api-cli/commit/ac936ccb7eae2cc019c530ac881c9934cd67b2a1))
 * update SDK settings ([732de15](https://github.com/DefinitelyATestOrg/test-api-cli/commit/732de1511433ac3e392e3410b3b860c81637a100))
 * update SDK settings ([c5e81f7](https://github.com/DefinitelyATestOrg/test-api-cli/commit/c5e81f7c0de22aff61def5d4a998a7e45f1c931a))
+* use `stretchr/testify` assertion helpers in tests ([71bca99](https://github.com/DefinitelyATestOrg/test-api-cli/commit/71bca99d60b77691b47eb867ba8640d535b93e1a))
 
 ## 0.2.0 (2025-09-03)
 

@@ -5,13 +5,10 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
-	"github.com/stainless-sdks/bruce-test-api-cli/internal/apiquery"
-	"github.com/stainless-sdks/bruce-test-api-cli/internal/requestflag"
-	"github.com/stainless-sdks/bruce-test-api-go"
-	"github.com/stainless-sdks/bruce-test-api-go/option"
-	"github.com/tidwall/gjson"
+	"github.com/DefinitelyATestOrg/test-api-cli/internal/apiquery"
+	"github.com/DefinitelyATestOrg/test-api-cli/internal/requestflag"
+	"github.com/DefinitelyATestOrg/test-api-go"
 	"github.com/urfave/cli/v3"
 )
 
@@ -19,71 +16,59 @@ var formTest = cli.Command{
 	Name:  "form-test",
 	Usage: "Mixed parameter types",
 	Flags: []cli.Flag{
-		&requestflag.IntFlag{
+		&requestflag.Flag[int64]{
 			Name: "version",
 		},
-		&requestflag.StringFlag{
+		&requestflag.Flag[string]{
 			Name: "user-id",
 		},
-		&requestflag.DateFlag{
-			Name: "date",
-			Config: requestflag.RequestConfig{
-				QueryPath: "date",
-			},
+		&requestflag.Flag[requestflag.DateValue]{
+			Name:      "date",
+			QueryPath: "date",
 		},
-		&requestflag.DateTimeFlag{
-			Name: "datetime",
-			Config: requestflag.RequestConfig{
-				QueryPath: "datetime",
-			},
+		&requestflag.Flag[requestflag.DateTimeValue]{
+			Name:      "datetime",
+			QueryPath: "datetime",
 		},
-		&requestflag.TimeFlag{
-			Name: "time",
-			Config: requestflag.RequestConfig{
-				QueryPath: "time",
-			},
+		&requestflag.Flag[requestflag.TimeValue]{
+			Name:      "time",
+			QueryPath: "time",
 		},
-		&requestflag.YAMLFlag{
-			Name: "filter",
-			Config: requestflag.RequestConfig{
-				QueryPath: "filter",
-			},
+		&requestflag.Flag[any]{
+			Name:      "filter",
+			QueryPath: "filter",
 		},
-		&requestflag.IntFlag{
-			Name: "limit",
-			Config: requestflag.RequestConfig{
-				QueryPath: "limit",
-			},
+		&requestflag.Flag[any]{
+			Name:      "id-or-index",
+			QueryPath: "idOrIndex",
 		},
-		&requestflag.StringSliceFlag{
-			Name: "tag",
-			Config: requestflag.RequestConfig{
-				QueryPath: "tags",
-			},
+		&requestflag.Flag[int64]{
+			Name:      "limit",
+			QueryPath: "limit",
 		},
-		&requestflag.StringFlag{
-			Name: "blorp",
-			Config: requestflag.RequestConfig{
-				BodyPath: "blorp",
-			},
+		&requestflag.Flag[[]string]{
+			Name:      "tag",
+			QueryPath: "tags",
 		},
-		&requestflag.YAMLFlag{
-			Name: "preferences",
-			Config: requestflag.RequestConfig{
-				BodyPath: "preferences",
-			},
+		&requestflag.Flag[string]{
+			Name:     "blorp",
+			BodyPath: "blorp",
 		},
-		&requestflag.StringSliceFlag{
-			Name: "x-flag",
-			Config: requestflag.RequestConfig{
-				HeaderPath: "X-Flags",
-			},
+		&requestflag.Flag[any]{
+			Name:     "pls-null",
+			BodyPath: "pls_null",
 		},
-		&requestflag.StringFlag{
-			Name: "x-trace-id",
-			Config: requestflag.RequestConfig{
-				HeaderPath: "X-Trace-ID",
-			},
+		&requestflag.Flag[any]{
+			Name:     "preferences",
+			BodyPath: "preferences",
+		},
+		&requestflag.Flag[[]string]{
+			Name:       "x-flag",
+			HeaderPath: "X-Flags",
+		},
+		&requestflag.Flag[string]{
+			Name:       "x-trace-id",
+			HeaderPath: "X-Trace-ID",
 		},
 	},
 	Action:          handleFormTest,
@@ -94,105 +79,62 @@ var jsonTest = cli.Command{
 	Name:  "json-test",
 	Usage: "Mixed parameter types",
 	Flags: []cli.Flag{
-		&requestflag.IntFlag{
+		&requestflag.Flag[int64]{
 			Name: "version",
 		},
-		&requestflag.StringFlag{
+		&requestflag.Flag[string]{
 			Name: "user-id",
 		},
-		&requestflag.DateFlag{
-			Name: "date",
-			Config: requestflag.RequestConfig{
-				QueryPath: "date",
-			},
+		&requestflag.Flag[requestflag.DateValue]{
+			Name:      "date",
+			QueryPath: "date",
 		},
-		&requestflag.DateTimeFlag{
-			Name: "datetime",
-			Config: requestflag.RequestConfig{
-				QueryPath: "datetime",
-			},
+		&requestflag.Flag[requestflag.DateTimeValue]{
+			Name:      "datetime",
+			QueryPath: "datetime",
 		},
-		&requestflag.TimeFlag{
-			Name: "time",
-			Config: requestflag.RequestConfig{
-				QueryPath: "time",
-			},
+		&requestflag.Flag[requestflag.TimeValue]{
+			Name:      "time",
+			QueryPath: "time",
 		},
-		&requestflag.YAMLFlag{
-			Name: "filter",
-			Config: requestflag.RequestConfig{
-				QueryPath: "filter",
-			},
+		&requestflag.Flag[any]{
+			Name:      "filter",
+			QueryPath: "filter",
 		},
-		&requestflag.IntFlag{
-			Name: "limit",
-			Config: requestflag.RequestConfig{
-				QueryPath: "limit",
-			},
+		&requestflag.Flag[any]{
+			Name:      "id-or-index",
+			QueryPath: "idOrIndex",
 		},
-		&requestflag.StringSliceFlag{
-			Name: "tag",
-			Config: requestflag.RequestConfig{
-				QueryPath: "tags",
-			},
+		&requestflag.Flag[int64]{
+			Name:      "limit",
+			QueryPath: "limit",
 		},
-		&requestflag.StringFlag{
-			Name: "blorp",
-			Config: requestflag.RequestConfig{
-				BodyPath: "blorp",
-			},
+		&requestflag.Flag[[]string]{
+			Name:      "tag",
+			QueryPath: "tags",
 		},
-		&requestflag.YAMLFlag{
-			Name: "preferences",
-			Config: requestflag.RequestConfig{
-				BodyPath: "preferences",
-			},
+		&requestflag.Flag[string]{
+			Name:     "blorp",
+			BodyPath: "blorp",
 		},
-		&requestflag.StringSliceFlag{
-			Name: "x-flag",
-			Config: requestflag.RequestConfig{
-				HeaderPath: "X-Flags",
-			},
+		&requestflag.Flag[any]{
+			Name:     "pls-null",
+			BodyPath: "pls_null",
 		},
-		&requestflag.StringFlag{
-			Name: "x-trace-id",
-			Config: requestflag.RequestConfig{
-				HeaderPath: "X-Trace-ID",
-			},
+		&requestflag.Flag[any]{
+			Name:     "preferences",
+			BodyPath: "preferences",
+		},
+		&requestflag.Flag[[]string]{
+			Name:       "x-flag",
+			HeaderPath: "X-Flags",
+		},
+		&requestflag.Flag[string]{
+			Name:       "x-trace-id",
+			HeaderPath: "X-Trace-ID",
 		},
 	},
 	Action:          handleJsonTest,
-	HideHelpCommand: true,
-}
-
-var listFoos = cli.Command{
-	Name:  "list-foos",
-	Usage: "Get foos",
-	Flags: []cli.Flag{
-		&requestflag.IntFlag{
-			Name:  "page",
-			Usage: "Page number",
-			Value: requestflag.Value[int64](1),
-			Config: requestflag.RequestConfig{
-				QueryPath: "page",
-			},
-		},
-		&requestflag.IntFlag{
-			Name:  "size",
-			Usage: "Page size",
-			Value: requestflag.Value[int64](50),
-			Config: requestflag.RequestConfig{
-				QueryPath: "size",
-			},
-		},
-		&requestflag.StringSliceFlag{
-			Name: "tag",
-			Config: requestflag.RequestConfig{
-				QueryPath: "tags",
-			},
-		},
-	},
-	Action:          handleListFoos,
 	HideHelpCommand: true,
 }
 
@@ -200,11 +142,9 @@ var updateCount = cli.Command{
 	Name:  "update-count",
 	Usage: "Perform update-count operation",
 	Flags: []cli.Flag{
-		&requestflag.IntFlag{
-			Name: "body",
-			Config: requestflag.RequestConfig{
-				BodyPath: "body",
-			},
+		&requestflag.Flag[int64]{
+			Name:     "body",
+			BodyRoot: true,
 		},
 	},
 	Action:          handleUpdateCount,
@@ -221,8 +161,9 @@ func handleFormTest(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
+
 	params := brucetestapi.FormTestParams{
-		Version: requestflag.CommandRequestValue[int64](cmd, "version"),
+		Version: cmd.Value("version").(int64),
 	}
 
 	options, err := flagOptions(
@@ -230,6 +171,7 @@ func handleFormTest(ctx context.Context, cmd *cli.Command) error {
 		apiquery.NestedQueryFormatDots,
 		apiquery.ArrayQueryFormatComma,
 		MultipartFormEncoded,
+		false,
 	)
 	if err != nil {
 		return err
@@ -237,7 +179,7 @@ func handleFormTest(ctx context.Context, cmd *cli.Command) error {
 
 	return client.FormTest(
 		ctx,
-		requestflag.CommandRequestValue[string](cmd, "user-id"),
+		cmd.Value("user-id").(string),
 		params,
 		options...,
 	)
@@ -253,8 +195,9 @@ func handleJsonTest(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
+
 	params := brucetestapi.JsonTestParams{
-		Version: requestflag.CommandRequestValue[int64](cmd, "version"),
+		Version: cmd.Value("version").(int64),
 	}
 
 	options, err := flagOptions(
@@ -262,6 +205,7 @@ func handleJsonTest(ctx context.Context, cmd *cli.Command) error {
 		apiquery.NestedQueryFormatDots,
 		apiquery.ArrayQueryFormatComma,
 		ApplicationJSON,
+		false,
 	)
 	if err != nil {
 		return err
@@ -269,55 +213,10 @@ func handleJsonTest(ctx context.Context, cmd *cli.Command) error {
 
 	return client.JsonTest(
 		ctx,
-		requestflag.CommandRequestValue[string](cmd, "user-id"),
+		cmd.Value("user-id").(string),
 		params,
 		options...,
 	)
-}
-
-func handleListFoos(ctx context.Context, cmd *cli.Command) error {
-	client := brucetestapi.NewClient(getDefaultRequestOptions(cmd)...)
-	unusedArgs := cmd.Args().Slice()
-
-	if len(unusedArgs) > 0 {
-		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
-	}
-	params := brucetestapi.ListFoosParams{}
-
-	options, err := flagOptions(
-		cmd,
-		apiquery.NestedQueryFormatDots,
-		apiquery.ArrayQueryFormatComma,
-		ApplicationJSON,
-	)
-	if err != nil {
-		return err
-	}
-
-	format := cmd.Root().String("format")
-	transform := cmd.Root().String("transform")
-	if format == "raw" {
-		var res []byte
-		options = append(options, option.WithResponseBodyInto(&res))
-		_, err = client.ListFoos(ctx, params, options...)
-		if err != nil {
-			return err
-		}
-		obj := gjson.ParseBytes(res)
-		return ShowJSON(os.Stdout, "list-foos", obj, format, transform)
-	} else {
-		iter := client.ListFoosAutoPaging(ctx, params, options...)
-		return streamOutput("list-foos", func(w *os.File) error {
-			for iter.Next() {
-				item := iter.Current()
-				obj := gjson.Parse(item.RawJSON())
-				if err := ShowJSON(w, "list-foos", obj, format, transform); err != nil {
-					return err
-				}
-			}
-			return iter.Err()
-		})
-	}
 }
 
 func handleUpdateCount(ctx context.Context, cmd *cli.Command) error {
@@ -327,6 +226,7 @@ func handleUpdateCount(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
+
 	params := brucetestapi.UpdateCountParams{}
 
 	options, err := flagOptions(
@@ -334,6 +234,7 @@ func handleUpdateCount(ctx context.Context, cmd *cli.Command) error {
 		apiquery.NestedQueryFormatDots,
 		apiquery.ArrayQueryFormatComma,
 		ApplicationJSON,
+		false,
 	)
 	if err != nil {
 		return err

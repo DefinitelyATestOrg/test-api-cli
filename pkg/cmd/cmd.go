@@ -16,14 +16,14 @@ import (
 )
 
 var (
-	Command       *cli.Command
-	OutputFormats = []string{"auto", "explore", "json", "jsonl", "pretty", "raw", "yaml"}
+	Command *cli.Command
 )
 
 func init() {
 	Command = &cli.Command{
 		Name:    "bruce-test-api",
 		Usage:   "CLI for the bruce-test-api API",
+		Suggest: true,
 		Version: Version,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
@@ -69,8 +69,28 @@ func init() {
 		Commands: []*cli.Command{
 			&formTest,
 			&jsonTest,
-			&listFoos,
 			&updateCount,
+			{
+				Name:     "pagination",
+				Category: "API RESOURCE",
+				Commands: []*cli.Command{
+					&paginationList,
+				},
+			},
+			{
+				Name:     "pagination:ints",
+				Category: "API RESOURCE",
+				Commands: []*cli.Command{
+					&paginationIntsList,
+				},
+			},
+			{
+				Name:     "stream-json",
+				Category: "API RESOURCE",
+				Commands: []*cli.Command{
+					&streamJsonStream,
+				},
+			},
 			{
 				Name:            "@manpages",
 				Usage:           "Generate documentation for 'man'",
